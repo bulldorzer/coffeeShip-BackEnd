@@ -1,0 +1,100 @@
+package com.teamproject.coffeeShop.service;
+
+import com.teamproject.coffeeShop.domain.Member;
+import com.teamproject.coffeeShop.domain.MemberRole;
+import com.teamproject.coffeeShop.dto.CustomPage;
+import com.teamproject.coffeeShop.dto.MemberDTO;
+import com.teamproject.coffeeShop.repository.MemberRepository;
+import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
+
+// 회원Service 구현클래스 - 이재민
+@Service
+@RequiredArgsConstructor
+@Transactional(readOnly = true)
+public class MemberServiceImpl implements MemberService {
+
+    private final MemberRepository memberRepository;
+    private final ModelMapper modelMapper;
+
+    @Transactional
+    @Override
+    public Long createMember(MemberDTO memberDTO){
+        validateDuplicateMember(memberDTO);
+        Member member = Member.builder()
+                .email(memberDTO.getEmail())
+                .pw(memberDTO.getPw())
+                .name(memberDTO.getName())
+                .city(memberDTO.getCity())
+                .street(memberDTO.getStreet())
+                .zipcode(memberDTO.getZipcode())
+                .memberShip(memberDTO.getMemberShip())
+                .memberRoleList(memberDTO.getRoleNames().stream()
+                        .map(MemberRole::valueOf)
+                        .collect(Collectors.toList())).build();
+        memberRepository.save(member);
+        return member.getId();
+    }
+
+    @Override
+    public CustomPage<MemberDTO> getAllMembersPaged(Pageable pageable){
+        Page<Member> memberPage = memberRepository.findAll(pageable);
+        if(memberPage == null) {
+//            throw new NoDataFoundException("조회된 데이터 없음");
+        }
+        Page<MemberDTO> dtoPage = memberPage.map(member -> modelMapper.map(member, MemberDTO.class));
+
+        int groupSize = 10;
+        return CustomPage.of(dtoPage, groupSize);
+    }
+
+    @Override
+    public MemberDTO getMember(Long id) {
+        Member member = memberRepository.findById(id)
+                .orElseThrow(()-> new RuntimeException("Member Not Found"));
+        return modelMapper.map(member, MemberDTO.class);
+    }
+
+    @Transactional
+    @Override
+    public void deleteMember(Long id) {
+        if(memberRepository.existsById(id)) {
+            memberRepository.deleteById(id);
+        } else {
+            throw new RuntimeException("Member Not Found");
+        }
+    }
+
+    @Override
+    public void updateMember(Long id, MemberDTO memberDTO) {
+        Member searchMember = memberRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Member Not Found"));
+
+        searchMember.changeEmail(memberDTO.getEmail());
+        searchMember.changeName(memberDTO.getName());
+        searchMember.changePw(memberDTO.getPw());
+        searchMember.changePhone(memberDTO.getPhone());
+        searchMember.changePoint(memberDTO.getPoint());
+        searchMember.changeAddress(memberDTO.getCity(), memberDTO.getStreet(), memberDTO.getZipcode());
+    }
+
+    @Override
+    public boolean existsById(Long id) {
+        return memberRepository.existsById(id);
+    }
+
+    private void validateDuplicateMember(MemberDTO memberDTO) {
+        Optional<Member> foundMember = memberRepository.findByEmail(memberDTO.getEmail());
+        if(foundMember.isPresent()) {
+            throw new IllegalArgumentException("이미 존재하는 회원");
+        }
+    }
+}
