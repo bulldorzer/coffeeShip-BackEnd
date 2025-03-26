@@ -10,6 +10,7 @@ import org.springframework.data.jpa.repository.Query;
 import java.time.LocalDate;
 import java.util.List;
 
+/* 주문서 Repository - 진우 */
 public interface OrderRepository extends JpaRepository<Order,Long> {
 
     // ✅ Fetch Join을 사용한 전체 조회 (Lazy Loading 문제 해결)
