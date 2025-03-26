@@ -12,7 +12,7 @@ import java.time.LocalDate;
 @Getter @Setter
 public class Order {
 
-    // PK
+    // PK 주문서아이디
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "order_id")
     private Long id;
