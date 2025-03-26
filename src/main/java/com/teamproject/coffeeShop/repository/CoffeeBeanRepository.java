@@ -32,6 +32,6 @@ public interface CoffeeBeanRepository extends JpaRepository<CoffeeBean, Long>{
     @Transactional
     @Modifying
     @Query("UPDATE CoffeeBean cb SET cb.delFlag = :flag WHERE cb.id = :coffeeBeanId")
-    int updateToDelete(@Param("coffeeBeanId") Long coffeeBeanId, @Param("flag") Boolean flag);
+    void updateToDelete(@Param("coffeeBeanId") Long coffeeBeanId, @Param("flag") Boolean flag);
 
 }
