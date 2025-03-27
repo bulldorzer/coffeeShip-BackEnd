@@ -1,9 +1,6 @@
 package com.teamproject.coffeeShop.domain;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.*;
 
 @Entity
@@ -18,5 +15,7 @@ public class Cart {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;            // 장바구니 고유번호
 
-    // private Member member;   // member_id 와 매핑 (FK, 회원 고유번호)
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "member_id") // 필드 이름 변경됨
+    private Member member;   // member_id(PK) 와 매핑 (FK, 회원 고유번호)
 }
