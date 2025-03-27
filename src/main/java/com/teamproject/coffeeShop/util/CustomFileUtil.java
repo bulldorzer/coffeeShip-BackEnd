@@ -26,70 +26,105 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class CustomFileUtil {
 
-  private String uploadPath;
+    @Value("${com.teamproject.coffeeShop.path}")
+    private String uploadPath;
 
-  @PostConstruct
-  public void init() {
-    File tempFolder = new File(uploadPath);
+    // 객체 생성되면서 호출될 메서드 => 시작되면서 수행될일
+    @PostConstruct
+    public void init() {
+        File tempFolder = new File(uploadPath);
 
-    }
-
-    uploadPath = tempFolder.getAbsolutePath();
-
-    log.info("-------------------------------------");
-    log.info(uploadPath);
-  }
-
-  public List<String> saveFiles(List<MultipartFile> files)throws RuntimeException{
-
-    List<String> uploadNames = new ArrayList<>();
-
-    for (MultipartFile multipartFile : files) {
-      String savedName = UUID.randomUUID().toString() + "_" + multipartFile.getOriginalFilename();
-      Path savePath = Paths.get(uploadPath, savedName);
-
-      try {
-        Files.copy(multipartFile.getInputStream(), savePath);
-
-        String contentType = multipartFile.getContentType();
-          Path thumbnailPath = Paths.get(uploadPath, "s_"+savedName);
-          Thumbnails.of(savePath.toFile())
-                  .toFile(thumbnailPath.toFile());
+        if(tempFolder.exists() == false) {
+            tempFolder.mkdir(); // 디렉토리 생성
         }
-        uploadNames.add(savedName);
-      } catch (IOException e) {
-        throw new RuntimeException(e.getMessage());
-      }
-    return uploadNames;
-  }
 
-  public ResponseEntity<Resource> getFile(String fileName) {
-    
+        uploadPath = tempFolder.getAbsolutePath();
 
-
-    
+        log.info("===============<CustomFileUtil>===============");
+        log.info(uploadPath);
     }
 
-    HttpHeaders headers = new HttpHeaders();
-    try{
-        return ResponseEntity.internalServerError().build();
-    }
-    return ResponseEntity.ok().headers(headers).body(resource);
-  }
+    // 파일저장
+    public List<String> saveFiles(List<MultipartFile> files)throws RuntimeException{
 
-  public void deleteFiles(List<String> fileNames) {
-      return;
-    }
-    fileNames.forEach(fileName -> {
-      String thumbnailFileName = "s_" + fileName;
-      Path thumbnailPath = Paths.get(uploadPath, thumbnailFileName);
-      Path filePath = Paths.get(uploadPath, fileName);
+        if(files == null || files.size() == 0){
+            return null;
+        }
 
-      try {
-        Files.deleteIfExists(filePath);
-        Files.deleteIfExists(thumbnailPath);
-        throw new RuntimeException(e.getMessage());
-      }
-    });
-  }
+        List<String> uploadNames = new ArrayList<>();
+
+        for (MultipartFile multipartFile : files) {
+
+            String savedName = UUID.randomUUID().toString() + "_" + multipartFile.getOriginalFilename();
+
+            Path savePath = Paths.get(uploadPath, savedName);
+
+            try {
+                Files.copy(multipartFile.getInputStream(), savePath);
+
+                String contentType = multipartFile.getContentType();
+
+                if(contentType != null && contentType.startsWith("image")){ //이미지여부 확인
+
+                    Path thumbnailPath = Paths.get(uploadPath, "s_"+savedName);
+
+                    Thumbnails.of(savePath.toFile())
+                            .size(400,400)
+                            .toFile(thumbnailPath.toFile());
+                }
+
+                uploadNames.add(savedName);
+            } catch (IOException e) {
+                throw new RuntimeException(e.getMessage());
+            }
+        }//end for
+        return uploadNames;
+    }
+
+    // 업로드 사진보여주기
+    public ResponseEntity<Resource> getFile(String fileName) {
+
+        Resource resource = new FileSystemResource(uploadPath+ File.separator + fileName);
+
+        if(!resource.exists()) {
+
+            resource = new FileSystemResource(uploadPath+ File.separator + "default.jpeg");
+
+        }
+
+        HttpHeaders headers = new HttpHeaders();
+
+        try{
+            headers.add("Content-Type", Files.probeContentType( resource.getFile().toPath() ));
+        } catch(Exception e){
+            return ResponseEntity.internalServerError().build();
+        }
+        return ResponseEntity.ok().headers(headers).body(resource);
+    }
+
+    // 서버 내부에서 파일 삭제
+    public void deleteFiles(List<String> fileNames) {
+
+        if(fileNames == null || fileNames.size() == 0){
+            return;
+        }
+
+        fileNames.forEach(fileName -> {
+
+            //썸네일이 있는지 확인하고 삭제
+            String thumbnailFileName = "s_" + fileName;
+            Path thumbnailPath = Paths.get(uploadPath, thumbnailFileName);
+            Path filePath = Paths.get(uploadPath, fileName);
+
+            try {
+                Files.deleteIfExists(filePath);
+                Files.deleteIfExists(thumbnailPath);
+            } catch (IOException e) {
+                throw new RuntimeException(e.getMessage());
+            }
+        });
+    }
+
+
+
 }
