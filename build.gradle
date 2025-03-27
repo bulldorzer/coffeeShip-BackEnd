@@ -33,6 +33,7 @@ dependencies {
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 
+
 	implementation 'org.modelmapper:modelmapper:3.2.0'
 
 	// 시큐리티를 구현하기 위한 디펜던시
