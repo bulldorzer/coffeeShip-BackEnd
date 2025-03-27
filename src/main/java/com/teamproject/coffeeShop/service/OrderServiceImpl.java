@@ -7,7 +7,7 @@ import com.teamproject.coffeeShop.repository.CoffeeBeanRepository;
 import com.teamproject.coffeeShop.repository.MemberRepository;
 import com.teamproject.coffeeShop.repository.OrderCoffeeBeanRepository;
 import com.teamproject.coffeeShop.repository.OrderRepository;
-import com.teamproject.coffeeShop.util.NoDataFoundException;
+import com.teamproject.coffeeShop.exception.NoDataFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.modelmapper.ModelMapper;
@@ -102,16 +102,53 @@ public class OrderServiceImpl implements OrderService{
 
         // 조회된 페이지가 없으면 예외처리
         if (orderPage.isEmpty()) throw new NoDataFoundException("조회된 데이터가 존재하지 않습니다.");
-        return null;
+
+        // 엔티티 -> DTO 변환
+        Page<OrderDTO> dtoPage = orderPage.map(order -> modelMapper.map(order, OrderDTO.class));
+        log.info("======<OrderDtoPage>======");
+        log.info(dtoPage.getContent());
+
+        // DTO에 페이지 네이션 정보 추가( 별도의 DTO 만들기)
+        int groupSize = 10;
+        return CustomPage.of(dtoPage,groupSize);
     }
 
+    // 특정 주문 아이템 삭제(취소)
     @Override
     public void cancelOrderCoffeeBean(Long orderCoffeeBeanId) {
 
+        // 삭제할 상품등록 주문서 탐색
+        OrderCoffeeBean orderCoffeeBean = orderCoffeeBeanRepository.findById(orderCoffeeBeanId)
+                .orElseThrow(()->new IllegalArgumentException("해당 주문서 존재하지 않습니다."));
+
+
+        orderCoffeeBean.cancel(); // 주문서 아이템취소 메소드 => 주문서에 등록된 아이템을 삭제하면서 상품수량테이블 수량을 올려줌
+        orderCoffeeBean.setOrder(null); // 관계해제 -> 등록된 상품을 order등록에 제외시킴
+        orderCoffeeBeanRepository.delete(orderCoffeeBean); // DB에 주문서에 등록된 아이템을 삭제
+
     }
 
+    // 전체 주문 취소
     @Override
     public void cancelAllOrderCoffeeBeans(Long orderId) {
+
+        // 주문 취소할 주문서 탐색
+        Order order = orderRepository.findById(orderId)
+                .orElseThrow(()->new IllegalArgumentException("해당 주문서는 존재하지 않습니다."));
+
+        // 상품등록주문서를 orderId로 탐색
+        List<OrderCoffeeBean> orderCoffeeBeanList = orderCoffeeBeanRepository.findByOrderId(orderId);
+        if (orderCoffeeBeanList.isEmpty()) throw new IllegalArgumentException("취소할 상품이 없습니다.");
+
+        // 주문서 상태 CANCEL로 변경
+        order.cancel();
+
+        // 다중 상품등록 주문서의 상품취소,order와 연결해재, DB데이터 삭제
+        for (OrderCoffeeBean orderCoffeeBean : orderCoffeeBeanList){
+            orderCoffeeBean.cancel();
+            orderCoffeeBean.setOrder(null);
+            orderCoffeeBeanRepository.delete(orderCoffeeBean);
+        }
 
     }
 }
