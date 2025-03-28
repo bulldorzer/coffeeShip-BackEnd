@@ -1,14 +1,15 @@
 package com.teamproject.coffeeShop.security.handler;
 
 import com.google.gson.Gson;
+import com.teamproject.coffeeShop.dto.MemberDTO;
+import com.teamproject.coffeeShop.util.JWTUtil;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
-import org.zerock.mallapi.dto.MemberDTO;
-import org.zerock.mallapi.util.JWTUtil;
+
 
 import java.io.IOException;
 import java.io.PrintWriter;

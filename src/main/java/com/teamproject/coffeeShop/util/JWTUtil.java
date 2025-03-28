@@ -1,5 +1,6 @@
 package com.teamproject.coffeeShop.util;
 
+import com.teamproject.coffeeShop.exception.CustomJWTException;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 import lombok.extern.log4j.Log4j2;
@@ -26,7 +27,8 @@ public class JWTUtil {
       throw new RuntimeException(e.getMessage());
     }
 
-    String jwtStr = Jwts.builder().header()
+    String jwtStr = Jwts.builder()
+            .header()
             .add("typ", "JWT")
             .add("alg", "HS256")
             .and()
