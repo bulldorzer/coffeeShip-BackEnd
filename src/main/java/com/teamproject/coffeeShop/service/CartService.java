@@ -10,13 +10,13 @@ import java.util.List;
 /* 장바구니 서비스 인터페이스 - 나영일 */
 public interface CartService {
 
-    // 장바구니 상품 추가 변경
+    // 장바구니 상품 추가 또는 변경(수정)
     public List<CartCoffeeBeanListDTO> addOrModify(CartCoffeeBeanDTO cartCoffeeBeanDTO);
 
     // 모든 장바구니 상품 목록 조회
-    public List<CartCoffeeBeanListDTO> getCartItems(String email);
+    public List<CartCoffeeBeanListDTO> getCartCoffeeBeans(String email);
 
     // 장바구니 상품 삭제
-    public List<CartCoffeeBeanListDTO> remove(Long id);
+    public List<CartCoffeeBeanListDTO> remove(Long cartCoffeeBeanId);
 
 }

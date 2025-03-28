@@ -1,9 +1,11 @@
 package com.teamproject.coffeeShop.util;
 
 import jakarta.annotation.PostConstruct;
+import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import net.coobird.thumbnailator.Thumbnails;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.Resource;
@@ -29,7 +31,7 @@ public class CustomFileUtil {
     @Value("${com.teamproject.coffeeShop.path}")
     private String uploadPath;
 
-    // 객체 생성되면서 호출될 메서드 => 시작되면서 수행될일
+    // 객체 생성되면서 호출될 메서드 => 시작되면서 수행될 일
     @PostConstruct
     public void init() {
         File tempFolder = new File(uploadPath);
@@ -55,6 +57,7 @@ public class CustomFileUtil {
 
         for (MultipartFile multipartFile : files) {
 
+            // 파일명 중복을 막기 위해 'UUID값_파일명' 형태로 파일명 구성
             String savedName = UUID.randomUUID().toString() + "_" + multipartFile.getOriginalFilename();
 
             Path savePath = Paths.get(uploadPath, savedName);

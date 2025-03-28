@@ -13,14 +13,15 @@ public interface CartCoffeeBeanRepository extends JpaRepository<CartCoffeeBean, 
 
     // 이메일로 장바구니의 상품 가져오기
     @Query("select "
-            + "new com.teamproject.coffeeShop.dto.CartCoffeeBeanListDTO(ccb.id, ccb.qty, cb.id, cb.name, cb.price, cbi.fileName) "
+            + "new com.teamproject.coffeeShop.dto.CartCoffeeBeanListDTO(ccb.id, ccb.qty, cb.id, cb.name, cb.price, "
+            + "cb.country, cb.amount, cb.taste, cbi.fileName) "
             + "from CartCoffeeBean ccb "
             + "inner join Cart c on ccb.cart = c "
             + "left join CoffeeBean cb on ccb.coffeeBean = cb "
             + "left join cb.imageList cbi " // elementCollect 값타입 - on 생략 가능, 알아서 key를 찾아줌
             + "where c.member.email = :email "
             + "and cbi.ord = 0 "
-            + "order by ccb desc")
+            + "order by ccb.id desc")
     public List<CartCoffeeBeanListDTO> getCoffeeBeansOfCartDTOByEmail(@Param("email") String email);
     
 
@@ -32,7 +33,7 @@ public interface CartCoffeeBeanRepository extends JpaRepository<CartCoffeeBean, 
             + "and ccb.coffeeBean.id = :id")
     public CartCoffeeBean getCoffeeBeanOfId(@Param("email") String email, @Param("id") Long id);
 
-    // 원두에서 장바구니 고유번호 가져오기
+    // 장바구니 원두에서 장바구니 고유번호 가져오기
     @Query("select ccb.cart.id "
             + "from CartCoffeeBean ccb "
             + "where ccb.id = :id")
@@ -40,14 +41,15 @@ public interface CartCoffeeBeanRepository extends JpaRepository<CartCoffeeBean, 
 
     // 장바구니 고유번호로 장바구니의 상품 가져오기
     @Query("select "
-            + "new com.teamproject.coffeeShop.dto.CartCoffeeBeanListDTO(ccb.id, ccb.qty, cb.id, cb.name, cb.price, cbi.fileName) "
+            + "new com.teamproject.coffeeShop.dto.CartCoffeeBeanListDTO(ccb.id, ccb.qty, cb.id, cb.name, cb.price, "
+            + "cb.country, cb.amount, cb.taste, cbi.fileName) "
             + "from CartCoffeeBean ccb "
             + "inner join Cart c on ccb.cart = c "
             + "left join CoffeeBean cb on ccb.coffeeBean = cb "
             + "left join cb.imageList cbi "
             + "where c.id = :id "
             + "and cbi.ord = 0 "
-            + "order by ccb desc")
+            + "order by ccb.id desc")
     public List<CartCoffeeBeanListDTO> getCoffeeBeansOfCartDTOByCart(@Param("id") Long id);
 }
 
