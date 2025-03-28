@@ -1,5 +1,9 @@
 package com.teamproject.coffeeShop.config;
 
+import com.teamproject.coffeeShop.security.filter.JWTCheckFilter;
+import com.teamproject.coffeeShop.security.handler.APILoginFailHandler;
+import com.teamproject.coffeeShop.security.handler.APILoginSuccessHandler;
+import com.teamproject.coffeeShop.security.handler.CustomAccessDeniedHandler;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.context.annotation.Bean;
@@ -14,10 +18,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
-import org.zerock.mallapi.security.filter.JWTCheckFilter;
-import org.zerock.mallapi.security.handler.APILoginFailHandler;
-import org.zerock.mallapi.security.handler.APILoginSuccessHandler;
-import org.zerock.mallapi.security.handler.CustomAccessDeniedHandler;
+
 
 import java.util.Arrays;
 
@@ -56,7 +57,7 @@ public class CustomSecurityConfig {
       config.failureHandler(new APILoginFailHandler()); // 로그인 실패 처리
     });
 
-    http.addFilterBefore(new JWTCheckFilter(), UsernamePasswordAuthenticationFilter.class); //JWT체크 
+    http.addFilterBefore(new JWTCheckFilter(), UsernamePasswordAuthenticationFilter.class); //JWT체크
 
     http.exceptionHandling(config -> {
       config.accessDeniedHandler(new CustomAccessDeniedHandler());
