@@ -19,8 +19,7 @@ public class CartController {
 
     private final CartService cartService;
 
-
-    @PreAuthorize("#itemDTO.email == authentication.name")
+//  @PreAuthorize("#itemDTO.email == authentication.name")
     @PostMapping("/change")
     // 수량 변경 요청 - 수량이 0보다 작게 들어오면 삭제, 1 이상으로 들어오면 변경
     public List<CartCoffeeBeanListDTO> changeCart(@RequestBody CartCoffeeBeanDTO cartCoffeeBeanDTO){
@@ -33,8 +32,8 @@ public class CartController {
     }
 
 
-    @PreAuthorize("hasAnyRole('ROLE_USER')")
-    @GetMapping("/items")
+//  @PreAuthorize("hasAnyRole('ROLE_USER')")
+    @GetMapping("/coffeeBeans")
     // 현재 로그인한 사용자를 기준으로 장바구니 원두 조회
     public List<CartCoffeeBeanListDTO> getCartCoffeeBeans(Principal principal) {
 
@@ -45,7 +44,7 @@ public class CartController {
         return cartService.getCartCoffeeBeans(email);
     }
 
-    @PreAuthorize("hasAnyRole('ROLE_USER')")
+//  @PreAuthorize("hasAnyRole('ROLE_USER')")
     @DeleteMapping("/{cartCoffeeBeanId}") // 장바구니에 담긴 원두 고유번호
     // 장바구니 원두 삭제
     public List<CartCoffeeBeanListDTO> removeFromCart( @PathVariable("cartCoffeeBeanId") Long cartCoffeeBeanId){
