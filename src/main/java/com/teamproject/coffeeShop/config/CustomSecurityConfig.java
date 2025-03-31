@@ -67,12 +67,14 @@ public class CustomSecurityConfig {
   // URL 별 접근 제어 설정
   http.authorizeHttpRequests(authz -> {
     authz
-            .requestMatchers("/api/board/list").permitAll()
-            .requestMatchers("/api/board/list/{bno}").permitAll()
-            .requestMatchers("/api/todo/list").permitAll()
-            .requestMatchers("/api/todo/list/{bno}").permitAll()
-            .requestMatchers("/api/products/list").permitAll()
-            .requestMatchers("/api/products/list/{bno}").permitAll()
+            .requestMatchers("/api/members/**").permitAll() // 로그인 화면
+            .requestMatchers("/api/membersave/**").permitAll() // 로그인 화면
+            .requestMatchers("/api/deliveries/**").permitAll() // 배달여부
+            .requestMatchers("/api/cart/**").permitAll() // 배달여부
+            .requestMatchers("/api/coffeeBeans/**").permitAll() // 배달여부
+            .requestMatchers("/api/orders/**").permitAll() //  주문목록
+            .requestMatchers("/api/categories/**").permitAll() // 카테고리 목록
+            .requestMatchers("/api/admin/**").hasAnyRole("MANAGER", "ADMIN") // 관리자 화면
             .anyRequest().authenticated();
   });
 
