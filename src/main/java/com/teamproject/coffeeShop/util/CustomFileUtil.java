@@ -26,7 +26,7 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class CustomFileUtil {
 
-    @Value("${com.teamproject.coffeeShop.path}")
+    @Value("${com.teamproject.coffeeShop.upload.path}")
     private String uploadPath;
 
     // 객체 생성되면서 호출될 메서드 => 시작되면서 수행될일

@@ -28,22 +28,22 @@ public class APILoginSuccessHandler implements AuthenticationSuccessHandler{
 
     MemberDTO memberDTO = (MemberDTO)authentication.getPrincipal();
 
-    Map<String, Object> claims = memberDTO.getClaims();
-
-    String accessToken = JWTUtil.generateToken(claims, 10);
-    String refreshToken = JWTUtil.generateToken(claims,60*24);
-
-    claims.put("accessToken", accessToken); // 승인토큰
-    claims.put("refreshToken", refreshToken); // 재승인토큰
-
-    Gson gson = new Gson();
-    
-    String jsonStr = gson.toJson(claims);
-
-    response.setContentType("application/json; charset=UTF-8");
-    PrintWriter printWriter = response.getWriter();
-    printWriter.println(jsonStr);
-    printWriter.close();
+//    Map<String, Object> claims = memberDTO.getClaims();
+//
+//    String accessToken = JWTUtil.generateToken(claims, 10);
+//    String refreshToken = JWTUtil.generateToken(claims,60*24);
+//
+//    claims.put("accessToken", accessToken); // 승인토큰
+//    claims.put("refreshToken", refreshToken); // 재승인토큰
+//
+//    Gson gson = new Gson();
+//
+//    String jsonStr = gson.toJson(claims);
+//
+//    response.setContentType("application/json; charset=UTF-8");
+//    PrintWriter printWriter = response.getWriter();
+//    printWriter.println(jsonStr);
+//    printWriter.close();
 
   }
 
