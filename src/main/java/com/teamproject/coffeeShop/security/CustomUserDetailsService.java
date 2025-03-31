@@ -1,14 +1,15 @@
 package com.teamproject.coffeeShop.security;
 
+import com.teamproject.coffeeShop.domain.Member;
+import com.teamproject.coffeeShop.dto.MemberDTO;
+import com.teamproject.coffeeShop.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
-import org.zerock.mallapi.domain.Member;
-import org.zerock.mallapi.dto.MemberDTO;
-import org.zerock.mallapi.repository.MemberRepository;
+
 
 import java.util.stream.Collectors;
 
