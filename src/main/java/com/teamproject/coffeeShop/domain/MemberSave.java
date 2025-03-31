@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
 @AllArgsConstructor
@@ -16,8 +17,12 @@ public class MemberSave {
     @Column(name = "member_save_id")
     private Long id;
 
-//    private Member member;
-//    private CoffeeBean coffeeBean;
-//    private Cart cart;
+    @Setter
+    private Long memberId;
+    @Setter
+    private Long cfbId;
+
+
+    private Long cartId;
 
 }

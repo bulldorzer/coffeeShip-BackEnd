@@ -1,32 +1,33 @@
-//package com.teamproject.coffeeShop.security.handler;
-//
-//import com.google.gson.Gson;
-//import jakarta.servlet.ServletException;
-//import jakarta.servlet.http.HttpServletRequest;
-//import jakarta.servlet.http.HttpServletResponse;
-//import lombok.extern.log4j.Log4j2;
-//import org.springframework.security.core.Authentication;
-//import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
-//import org.zerock.mallapi.dto.MemberDTO;
-//import org.zerock.mallapi.util.JWTUtil;
-//
-//import java.io.IOException;
-//import java.io.PrintWriter;
-//import java.util.Map;
-//
-//@Log4j2
-//public class APILoginSuccessHandler implements AuthenticationSuccessHandler{
-//
-//@Override
-//  public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
-//      Authentication authentication) throws IOException, ServletException {
-//
-//    log.info("-------------------------------------");
-//    log.info(authentication); // 토큰정보와 계정 아이디, 비밀번호 그리고 권한정보 까지 확인 가능함
-//    log.info("-------------------------------------");
-//
-//    MemberDTO memberDTO = (MemberDTO)authentication.getPrincipal();
-//
+package com.teamproject.coffeeShop.security.handler;
+
+import com.google.gson.Gson;
+import com.teamproject.coffeeShop.dto.MemberDTO;
+import com.teamproject.coffeeShop.util.JWTUtil;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import lombok.extern.log4j.Log4j2;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
+
+
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.Map;
+
+@Log4j2
+public class APILoginSuccessHandler implements AuthenticationSuccessHandler{
+
+@Override
+  public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
+      Authentication authentication) throws IOException, ServletException {
+
+    log.info("-------------------------------------");
+    log.info(authentication); // 토큰정보와 계정 아이디, 비밀번호 그리고 권한정보 까지 확인 가능함
+    log.info("-------------------------------------");
+
+    MemberDTO memberDTO = (MemberDTO)authentication.getPrincipal();
+
 //    Map<String, Object> claims = memberDTO.getClaims();
 //
 //    String accessToken = JWTUtil.generateToken(claims, 10);
@@ -43,8 +44,8 @@
 //    PrintWriter printWriter = response.getWriter();
 //    printWriter.println(jsonStr);
 //    printWriter.close();
-//
-//  }
-//
-//
-//}
+
+  }
+
+  
+}

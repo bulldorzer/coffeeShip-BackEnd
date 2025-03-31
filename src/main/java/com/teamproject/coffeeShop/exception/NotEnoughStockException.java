@@ -1,6 +1,8 @@
 package com.teamproject.coffeeShop.exception;
 
-public class NotEnoughStockException extends RuntimeException {
+// RuntimeException : 실행 중(Runtime)에서 발생하는 예외를 나타냄.
+public class NotEnoughStockException extends RuntimeException{
+
     public NotEnoughStockException() {
         super();
     }

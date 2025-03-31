@@ -19,9 +19,9 @@ public class OrderCoffeeBean {
     private Long id;
 
     // FK coffeeBean_id 참조
-//    @ManyToOne(fetch = FetchType.LAZY)
-//    @JoinColumn(name="item_id")
-//    private Item item;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name="coffeeBean_id")
+    private CoffeeBean coffeeBean;
 
     // FK order_id 참조
     @ManyToOne(fetch = FetchType.LAZY) 
@@ -41,23 +41,23 @@ public class OrderCoffeeBean {
     private int qty;
 
     // 주문상품 생성
-//    public static OrderItem createOrderItem(Order order, Item item, int orderPrice, int qty){
-//
-//        OrderItem orderItem = new OrderItem();
-//
-//        orderItem.setOrder(order); // 주문서 id가 저장됨 (order_id)
-//        orderItem.setItem(item); // 상품id (item_id)
-//        orderItem.setOrderPrice(orderPrice); // 상품가격
-//        orderItem.setQty(qty); // 주문수량
-//
-//        item.removeStock(qty); // 재고 감소
-//        return orderItem;
-//    }
+    public static OrderCoffeeBean createOrderItem(Order order, CoffeeBean coffeeBean, int orderPrice, int qty){
+
+        OrderCoffeeBean orderCoffeeBean = new OrderCoffeeBean();
+
+        orderCoffeeBean.setOrder(order); // 주문서 id가 저장됨 (order_id)
+        orderCoffeeBean.setCoffeeBean(coffeeBean); // 상품id (item_id)
+        orderCoffeeBean.setOrderPrice(orderPrice); // 상품가격
+        orderCoffeeBean.setQty(qty); // 주문수량
+
+        coffeeBean.removeStock(qty); // 재고 감소
+        return orderCoffeeBean;
+    }
 
     // 주문 취소 - 재고 추가
-//    public void cancel(){
-//        getItem().addStock(qty);
-//    }
+    public void cancel(){
+        getCoffeeBean().addStock(qty);
+    }
 
     // 주문상품 금액 계산 - 상품당 단가 * 수량
     public int getTotalPrice(){
