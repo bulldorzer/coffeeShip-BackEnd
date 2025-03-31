@@ -8,8 +8,8 @@ import org.springframework.data.domain.Pageable;
 import java.util.List;
 
 public interface DeliveryService {
-    void createDelivery(Delivery delivery);
-    CustomPage<Delivery> getAllDeliveriesPaged(Pageable pageable);
+    Long createDelivery(DeliveryDTO deliveryDTO);
+    CustomPage<DeliveryDTO> getAllDeliveriesPaged(Pageable pageable);
     Delivery getDelivery(Long id);
     void updateDelivery(Long id, Delivery delivery);
     void deleteDelivery(Long id);

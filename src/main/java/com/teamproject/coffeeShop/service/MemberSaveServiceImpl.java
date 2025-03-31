@@ -2,13 +2,17 @@ package com.teamproject.coffeeShop.service;
 
 
 import com.teamproject.coffeeShop.domain.MemberSave;
+import com.teamproject.coffeeShop.dto.CustomPage;
 import com.teamproject.coffeeShop.dto.MemberSaveDTO;
 import com.teamproject.coffeeShop.dto.MemberSaveListDTO;
+import com.teamproject.coffeeShop.exception.NoDataFoundException;
 import com.teamproject.coffeeShop.repository.CoffeeBeanRepository;
 import com.teamproject.coffeeShop.repository.MemberRepository;
 import com.teamproject.coffeeShop.repository.MemberSaveRepository;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -23,8 +27,15 @@ public class MemberSaveServiceImpl implements MemberSaveService{
     private final ModelMapper modelMapper;
 
     @Override
-    public List<MemberSaveListDTO> getListMemberSave(Long id) {
-        return memberSaveRepository.getListOfMemberSaveById(id);
+    public CustomPage<MemberSaveListDTO> getListMemberSave(Pageable pageable) {
+        Page<MemberSave> memberSavePage = memberSaveRepository.findAll(pageable);
+        if(memberSavePage == null) {
+            throw new NoDataFoundException("조회된 데이터 없음");
+        }
+        Page<MemberSaveListDTO> dtoPage = memberSavePage
+                .map(memberSave -> modelMapper.map(memberSave, MemberSaveListDTO.class));
+        int groupSize = 10;
+        return CustomPage.of(dtoPage, groupSize);
     }
 
     @Override
@@ -42,12 +53,12 @@ public class MemberSaveServiceImpl implements MemberSaveService{
     }
 
     @Override
-    public void removeCoffeeBean(Long memberId, Long coffeeBeanId) {
+    public void deleteCoffeeBean(Long memberId, Long coffeeBeanId) {
         memberSaveRepository.deleteByMemberIdAndCfbId(memberId, coffeeBeanId);
     }
 
     @Override
-    public void removeAllCoffeeBean(Long memberId) {
+    public void deleteAllCoffeeBean(Long memberId) {
         memberSaveRepository.deleteByMemberId(memberId);
     }
 

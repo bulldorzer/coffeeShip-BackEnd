@@ -4,6 +4,7 @@ import com.teamproject.coffeeShop.domain.Member;
 import com.teamproject.coffeeShop.domain.MemberRole;
 import com.teamproject.coffeeShop.dto.CustomPage;
 import com.teamproject.coffeeShop.dto.MemberDTO;
+import com.teamproject.coffeeShop.exception.NoDataFoundException;
 import com.teamproject.coffeeShop.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
@@ -47,7 +48,7 @@ public class MemberServiceImpl implements MemberService {
     public CustomPage<MemberDTO> getAllMembersPaged(Pageable pageable){
         Page<Member> memberPage = memberRepository.findAll(pageable);
         if(memberPage == null) {
-//            throw new NoDataFoundException("조회된 데이터 없음");
+            throw new NoDataFoundException("조회된 데이터 없음");
         }
         Page<MemberDTO> dtoPage = memberPage.map(member -> modelMapper.map(member, MemberDTO.class));
 
