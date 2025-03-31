@@ -37,7 +37,7 @@ public class CustomSecurityConfig {
 
 @Bean
   public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-    
+
     log.info("---------------------security config---------------------------");
 
     // 1. CORS 정책적용

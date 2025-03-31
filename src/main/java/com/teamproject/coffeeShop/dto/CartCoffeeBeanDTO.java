@@ -11,10 +11,10 @@ import lombok.NoArgsConstructor;
 @Builder
 /* 장바구니 - 원두 연결 DTO : 나영일 */
 public class CartCoffeeBeanDTO {
-    private Long id;            // 장바구니 원두 고유번호
-    private Long cartId;        // 장바구니 고유번호
-    private Long coffeeBeanId;  // 원두 고유번호
-    private int qty;    // 원두 수량
+    private Long cartCoffeeBeanId;      // 장바구니 원두 고유번호
+    private Long coffeeBeanId;          // 원두 고유번호
+    private String email;               // 회원 이메일
+    private int qty;                    // 장바구니 원두 수량
 }
 
 /*
