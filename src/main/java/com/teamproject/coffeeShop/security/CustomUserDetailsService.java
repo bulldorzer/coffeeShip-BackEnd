@@ -27,26 +27,26 @@ public class CustomUserDetailsService implements UserDetailsService{
   @Override
   public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
     
-    log.info("----------------loadUserByUsername-----------------------------");
+//    log.info("----------------loadUserByUsername-----------------------------");
+//
+//    Member member = memberRepository.getWithRoles(username);
+//
+//    if(member == null){
+//      throw new UsernameNotFoundException("Not Found");
+//    }
+//    // MemberDTO 타입으로 반환
+//    MemberDTO memberDTO = new MemberDTO(
+//            member.getEmail(),
+//            member.getPw(),
+//            member.getNickname(),
+//            member.isSocial(),
+//            member.getMemberRoleList()
+//                  .stream()
+//                  .map(memberRole -> memberRole.name()).collect(Collectors.toList()));
+//
+//    log.info(memberDTO);
 
-    Member member = memberRepository.getWithRoles(username);
-
-    if(member == null){
-      throw new UsernameNotFoundException("Not Found");
-    }
-    // MemberDTO 타입으로 반환
-    MemberDTO memberDTO = new MemberDTO(
-            member.getEmail(),
-            member.getPw(),
-            member.getNickname(),
-            member.isSocial(),
-            member.getMemberRoleList()
-                  .stream()
-                  .map(memberRole -> memberRole.name()).collect(Collectors.toList()));
-
-    log.info(memberDTO);
-
-    return memberDTO;
+    return null;
 
   }
   
