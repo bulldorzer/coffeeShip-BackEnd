@@ -11,7 +11,8 @@ import java.util.List;
 /* 장바구니, 원두 연결(조인) Repository : 나영일 */
 public interface CartCoffeeBeanRepository extends JpaRepository<CartCoffeeBean, Long> {
 
-    // 이메일로 장바구니의 상품 가져오기
+    // 특정 사용자의 이메일을 통해서 해당 사용자의 모든 장바구니 원두를 조회
+    // -> 로그인했을 때 사용자가 담은 모든 장바구니 원두를 조회 시 사용
     @Query("select "
             + "new com.teamproject.coffeeShop.dto.CartCoffeeBeanListDTO(ccb.id, ccb.qty, cb.id, cb.name, cb.price, "
             + "cb.country, cb.amount, cb.taste, cbi.fileName) "
@@ -25,7 +26,8 @@ public interface CartCoffeeBeanRepository extends JpaRepository<CartCoffeeBean, 
     public List<CartCoffeeBeanListDTO> getCoffeeBeansOfCartDTOByEmail(@Param("email") String email);
     
 
-    // 특정 이메일의 장바구니에서 고유번호로 원두 가져오기
+    // 사용자의 이메일과 원두 고유번호로 해당 장바구니 원두를 알아내는 기능
+    // -> 새로운 원두를 장바구니에 담고자 할 때 기존 장바구니 원두인지 확인하기 위해서 필요
     @Query("select ccb "
             + "from CartCoffeeBean ccb "
             + "inner join Cart c on ccb.cart = c "
@@ -33,13 +35,15 @@ public interface CartCoffeeBeanRepository extends JpaRepository<CartCoffeeBean, 
             + "and ccb.coffeeBean.id = :id")
     public CartCoffeeBean getCoffeeBeanOfId(@Param("email") String email, @Param("id") Long id);
 
-    // 장바구니 원두에서 장바구니 고유번호 가져오기
+    // 장바구니 원두가 속한 장바구니의 고유번호를 알아내는 기능
+    // -> 해당 장바구니 원두를 삭제한 후 해당 장바구니 원두가 속해 있는 장바구니의 모든 원두를 알아내기 위해서 필요
     @Query("select ccb.cart.id "
             + "from CartCoffeeBean ccb "
             + "where ccb.id = :id")
     public Long getCartFromCoffeeBean(@Param("id") Long id);
 
-    // 장바구니 고유번호로 장바구니의 상품 가져오기
+    // 특정한 장바구니의 고유번호만으로 해당 장바구닝의 모든 장바구니 원두들을 조회하는 기능
+    // -> 특정한 장바구니 원두를 삭제한 후에 해당 장바구니 원두가 속해 있는 장바구니의 모든 장바구니 원두를 조회할 때 필요
     @Query("select "
             + "new com.teamproject.coffeeShop.dto.CartCoffeeBeanListDTO(ccb.id, ccb.qty, cb.id, cb.name, cb.price, "
             + "cb.country, cb.amount, cb.taste, cbi.fileName) "

@@ -23,6 +23,7 @@ public class CartCoffeeBean {
     @JoinColumn(name = "cart_id") // 필드 이름 변경됨
     private Cart cart;            // 장바구니 참조번호(FK)
 
+    @Column(name = "qty")         // 중복 컬럼 생성 방지
     private int qty;              // 원두 수량
 
     public void changeQty(int qty){

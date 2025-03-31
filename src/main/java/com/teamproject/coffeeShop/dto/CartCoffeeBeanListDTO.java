@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 public class CartCoffeeBeanListDTO {
 
     private Long cartCoffeeBeanId;  // 장바구니 원두 고유번호
-    private int quantity;           // 장바구니 원두 수량
+    private int qty;                // 장바구니 원두 수량
 
     private Long coffeeBeanId;      // 원두 고유번호
     private String name;            // 원두 이름
@@ -24,10 +24,10 @@ public class CartCoffeeBeanListDTO {
     private String imageFile;       // 이미지 파일?
 
     // 생성자
-    public CartCoffeeBeanListDTO(Long cartCoffeeBeanId, int quantity, Long coffeeBeanId, String name, int price,
+    public CartCoffeeBeanListDTO(Long cartCoffeeBeanId, int qty, Long coffeeBeanId, String name, int price,
                                  String country, String amount, CoffeeBeanTaste taste, String imageFile) {
         this.cartCoffeeBeanId = cartCoffeeBeanId;
-        this.quantity = quantity;
+        this.qty = qty;
         this.coffeeBeanId = coffeeBeanId;
         this.name = name;
         this.price = price;
