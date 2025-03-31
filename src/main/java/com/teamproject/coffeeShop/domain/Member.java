@@ -35,6 +35,9 @@ public class Member {
     private String street;
     private String zipcode;
 
+    // true : 소셜(카카오) 로그인/회원가입, false : 일반 로그인/회원가입
+    private boolean social;
+
     @Enumerated(EnumType.STRING)
     private MemberShip memberShip;
 
