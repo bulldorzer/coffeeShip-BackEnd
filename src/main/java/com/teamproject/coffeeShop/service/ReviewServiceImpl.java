@@ -12,6 +12,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -29,6 +30,11 @@ public class ReviewServiceImpl implements ReviewService{
     @Override
     public Long register(ReviewDTO reviewDTO) {
         log.info("Review Board register");
+
+        // postDate가 null이면 오늘 날짜로 설정
+        if (reviewDTO.getPostDate() == null) {
+            reviewDTO.setPostDate(LocalDate.now());
+        }
 
         // ReviewDTO를 Review 엔티티로 변환
         Review review = modelMapper.map(reviewDTO,Review.class);
@@ -70,7 +76,8 @@ public class ReviewServiceImpl implements ReviewService{
         review.changeTitle(reviewDTO.getTitle());
         review.changeScore(reviewDTO.getScore());
         review.changeContent(reviewDTO.getContent());
-        review.changePostDate(reviewDTO.getPostDate());
+        // 수정 작업을 하면 오늘 날짜로 변경
+        review.changePostDate(LocalDate.now());
 
         // 수정 데이터 저장
         reviewRepository.save(review);

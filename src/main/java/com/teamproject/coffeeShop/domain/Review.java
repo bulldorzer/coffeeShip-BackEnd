@@ -44,7 +44,8 @@ public class Review {
     private String content;
 
     // 게시판 등록날짜
-    private LocalDate postDate;
+    @Builder.Default
+    private LocalDate postDate = LocalDate.now();
 
     // 점수수정
     public void changeScore(int score) { this.score = score; }
