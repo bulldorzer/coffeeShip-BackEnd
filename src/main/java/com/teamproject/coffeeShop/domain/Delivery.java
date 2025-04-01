@@ -2,14 +2,14 @@ package com.teamproject.coffeeShop.domain;
 
 // 배송 엔티티 - 이재민
 import jakarta.persistence.*;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 @Entity
 @Getter
 @Setter
 @Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class Delivery {
 
     public static Delivery builder;
