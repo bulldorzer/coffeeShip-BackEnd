@@ -24,7 +24,7 @@ public class OrderController {
     // 전체 주문 조회 페이징 처리
     @GetMapping("/list")
     public ResponseEntity<CustomPage<OrderDTO>>
-    getOrders(@PageableDefault(page = 0, size = 3) Pageable pageable) {
+    getOrders(@PageableDefault(page = 0, size = 10) Pageable pageable) {
         return ResponseEntity.ok(orderService.getAllCoffeeBeansPaged(pageable));
     }
 
@@ -35,7 +35,7 @@ public class OrderController {
     }
 
     // 주문서에 아이템 추가
-    @PostMapping("/{orderId}/items")
+    @PostMapping("/{orderId}/coffebean")
     public ResponseEntity<OrderCoffeeBean> addOrderItem(
             @PathVariable Long orderId,
             @RequestParam Long itemId,
@@ -44,14 +44,13 @@ public class OrderController {
     }
 
     // 특정 주문 아이템 취소
-    @DeleteMapping("/items/{orderItemId}")
-    public ResponseEntity<Map<String, Object>> removeOrderItem(@PathVariable Long orderItemId) {
+    @DeleteMapping("/items/{orderCoffeeBeanId}")
+    public ResponseEntity<Map<String, Object>> removeOrderItem(@PathVariable Long orderCoffeeBeanId) {
         Map<String, Object> response = new HashMap<>();
-        System.out.println("orderItemId 111: "+orderItemId);
         try {
-            orderService.cancelOrderCoffeeBean(orderItemId);
+            orderService.cancelOrderCoffeeBean(orderCoffeeBeanId);
             response.put("message", "주문 아이템 삭제 성공");
-            response.put("orderItemId", orderItemId);
+            response.put("orderCoffeeBeanId", orderCoffeeBeanId);
             response.put("status", "success");
             return ResponseEntity.ok(response);
         } catch (IllegalArgumentException e) {
