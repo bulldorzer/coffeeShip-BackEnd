@@ -32,27 +32,40 @@ public class JWTCheckFilter extends OncePerRequestFilter {
 
     log.info("check uri.............." + path);
 
-    //api/member/ 경로의 호출은 체크하지 않음 
-    if(path.startsWith("/api/member/")  ) {
+    /* 서비스하면서 토큰체크 하지 않는 서비스들 */
+    if (path.equals("/api/coffeeBeans") || path.startsWith("/api/coffeeBeans")) {
       return true;
     }
 
-    if (path.equals("/api/board/list") || path.startsWith("/api/board/list/")) {
+    if (path.equals("/api/review") || path.startsWith("/api/review")) {
       return true;
     }
 
-    if (path.equals("/api/todo/list") || path.startsWith("/api/todo/list/")) {
+    if (path.equals("/api/cfaq") || path.startsWith("/api/cfaq")) {
       return true;
     }
 
-    if (path.equals("/api/products/list") || path.startsWith("/api/products/list/")) {
+    if (path.equals("/api/pfaq") || path.startsWith("/api/pfaq")) {
       return true;
     }
 
-    //이미지 조회 경로는 체크하지 않는다면 
-    if(path.startsWith("/api/products/view/")) {
+    /* 추후 지워야 할 경로들*/
+    if (path.equals("/api/members") || path.startsWith("/api/members")) {
       return true;
     }
+    if (path.equals("/api/membersave") || path.startsWith("/api/membersave")) {
+      return true;
+    }
+    if (path.equals("/api/deliveries") || path.startsWith("/api/deliveries")) {
+      return true;
+    }
+    if (path.equals("/api/cart") || path.startsWith("/api/cart")) {
+      return true;
+    }
+    if (path.equals("/api/orders") || path.startsWith("/api/orders")) {
+      return true;
+    }
+
 
     return false;
   }

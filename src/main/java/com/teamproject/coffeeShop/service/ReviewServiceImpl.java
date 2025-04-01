@@ -61,7 +61,7 @@ public class ReviewServiceImpl implements ReviewService{
     public void modify(ReviewDTO reviewDTO) {
 
         // 수정할 리뷰 데이터 가져오기
-        Optional<Review> result = reviewRepository.findById(reviewDTO.getReviewId());
+        Optional<Review> result = reviewRepository.findById(reviewDTO.getId());
 
         // 자료형 변경 Optional -> Review
         Review review = result.orElseThrow();
