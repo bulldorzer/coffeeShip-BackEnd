@@ -9,19 +9,20 @@ import lombok.NoArgsConstructor;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
+/* 상품문의 DTO - 진우 */
 @Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
 public class PfaqDTO {
 
-    // 상품후기 게시판 아이디
-    private Long pfaqId;
+    // 상품문의 게시판 아이디
+    private Long id;
 
-    // 상품후기 제목
+    // 상품문의 제목
     private String title;
 
-    // 상품후기 내용
+    // 상품문의 내용
     private String writer;
 
     // 글쓴이
@@ -31,5 +32,5 @@ public class PfaqDTO {
     private LocalDate postDate;
 
     // 응답상태
-    private Answer answer;
+    private String answer;
 }
