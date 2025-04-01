@@ -12,8 +12,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
 
+// 배송Service 구현클래스 - 이재민
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
@@ -57,21 +57,24 @@ public class DeliveryServiceImpl implements DeliveryService{
     }
 
     // 배송 정보 변경
+    @Transactional
     @Override
-    public void updateDelivery(Long id, Delivery delivery) {
+    public void updateDelivery(Long id, DeliveryDTO deliveryDTO) {
         Delivery existingDelivery = deliveryRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Delivery Not Found"));
-        existingDelivery.setStatus(delivery.getStatus());
-        existingDelivery.setCity(delivery.getCity());
-        existingDelivery.setStreet(delivery.getStreet());
-        existingDelivery.setZipcode(delivery.getZipcode());
-        existingDelivery.setStatus(delivery.getStatus());
+        existingDelivery.setShipper(deliveryDTO.getShipper());
+        existingDelivery.setRequest(deliveryDTO.getRequest());
+        existingDelivery.setCity(deliveryDTO.getCity());
+        existingDelivery.setStreet(deliveryDTO.getStreet());
+        existingDelivery.setZipcode(deliveryDTO.getZipcode());
+        existingDelivery.setStatus(deliveryDTO.getStatus());
 
         deliveryRepository.save(existingDelivery);
 
     }
 
     // 배송 삭제
+    @Transactional
     @Override
     public void deleteDelivery(Long id) {
         if(deliveryRepository.existsById(id)) {
