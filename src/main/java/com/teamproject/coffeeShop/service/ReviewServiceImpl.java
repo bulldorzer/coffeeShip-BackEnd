@@ -13,7 +13,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
-import java.util.List;
 import java.util.Optional;
 
 /* 상품후기 게시판 구현 - 진우 */
@@ -49,6 +48,7 @@ public class ReviewServiceImpl implements ReviewService{
     // 리뷰 상세보기
     @Override
     public ReviewDTO getReview(Long reviewId) {
+        log.info("Review Board getReview");
 
         //엔티티 데이터 추출
         Optional<Review> result = reviewRepository.findById(reviewId);
@@ -62,9 +62,31 @@ public class ReviewServiceImpl implements ReviewService{
         return dto;
     }
 
+    // 리뷰 목록 페이징 처리
+    @Override
+    public CustomPage<ReviewDTO> getAllReviews(Pageable pageable) {
+        log.info("Review Board getAllReviews");
+
+        // Review엔티티 페이징 처리된 데이터 조회
+        Page<Review> reviewPage = reviewRepository.findAll(pageable);
+
+        // 조회된 페이지 없으면 예외처리
+        if (reviewPage.isEmpty()) throw new IllegalArgumentException("조회된 데이터가 존재하지 않습니다.");
+
+        // 엔티티 -> DTO 변환
+        Page<ReviewDTO> dtoPage = reviewPage.map(review -> modelMapper.map(review,ReviewDTO.class));
+        log.info("=======<ReviewDTO Page>=======");
+        log.info(dtoPage.getContent());
+
+        // DTO 페이지 네이션 정보 추가( 별도의 DTO 만들기)
+        int groupSize = 10;
+        return CustomPage.of(dtoPage,groupSize);
+    }
+
     // 리뷰 내용 수정
     @Override
     public void modify(ReviewDTO reviewDTO) {
+        log.info("Review Board modify");
 
         // 수정할 리뷰 데이터 가져오기
         Optional<Review> result = reviewRepository.findById(reviewDTO.getId());
@@ -86,27 +108,10 @@ public class ReviewServiceImpl implements ReviewService{
     // 리뷰 내용 삭제
     @Override
     public void remove(Long reviewId) {
+        log.info("Review Board remove");
         reviewRepository.deleteById(reviewId);
 
     }
 
-    // 리뷰 목록 페이징 처리
-    @Override
-    public CustomPage<ReviewDTO> getAllReviews(Pageable pageable) {
 
-        // Review엔티티 페이징 처리된 데이터 조회
-        Page<Review> reviewPage = reviewRepository.findAll(pageable);
-
-        // 조회된 페이지 없으면 예외처리
-        if (reviewPage.isEmpty()) throw new IllegalArgumentException("조회된 데이터가 존재하지 않습니다.");
-
-        // 엔티티 -> DTO 변환
-        Page<ReviewDTO> dtoPage = reviewPage.map(review -> modelMapper.map(review,ReviewDTO.class));
-        log.info("=======<ReviewDTO Page>=======");
-        log.info(dtoPage.getContent());
-
-        // DTO 페이지 네이션 정보 추가( 별도의 DTO 만들기)
-        int groupSize = 10;
-        return CustomPage.of(dtoPage,groupSize);
-    }
 }
