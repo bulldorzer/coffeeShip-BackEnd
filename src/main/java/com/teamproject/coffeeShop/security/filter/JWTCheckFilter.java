@@ -31,43 +31,43 @@ public class JWTCheckFilter extends OncePerRequestFilter {
     String path = request.getRequestURI();
 
     log.info("check uri.............." + path);
+//
+//    /* 서비스하면서 토큰체크 하지 않는 서비스들 */
+//    if (path.equals("/api/coffeeBeans") || path.startsWith("/api/coffeeBeans")) {
+//      return true;
+//    }
+//
+//    if (path.equals("/api/review") || path.startsWith("/api/review")) {
+//      return true;
+//    }
+//
+//    if (path.equals("/api/cfaq") || path.startsWith("/api/cfaq")) {
+//      return true;
+//    }
+//
+//    if (path.equals("/api/pfaq") || path.startsWith("/api/pfaq")) {
+//      return true;
+//    }
+//
+//    /* 추후 지워야 할 경로들*/
+//    if (path.equals("/api/members") || path.startsWith("/api/members")) {
+//      return true;
+//    }
+//    if (path.equals("/api/membersave") || path.startsWith("/api/membersave")) {
+//      return true;
+//    }
+//    if (path.equals("/api/deliveries") || path.startsWith("/api/deliveries")) {
+//      return true;
+//    }
+//    if (path.equals("/api/cart") || path.startsWith("/api/cart")) {
+//      return true;
+//    }
+//    if (path.equals("/api/orders") || path.startsWith("/api/orders")) {
+//      return true;
+//    }
 
-    /* 서비스하면서 토큰체크 하지 않는 서비스들 */
-    if (path.equals("/api/coffeeBeans") || path.startsWith("/api/coffeeBeans")) {
-      return true;
-    }
 
-    if (path.equals("/api/review") || path.startsWith("/api/review")) {
-      return true;
-    }
-
-    if (path.equals("/api/cfaq") || path.startsWith("/api/cfaq")) {
-      return true;
-    }
-
-    if (path.equals("/api/pfaq") || path.startsWith("/api/pfaq")) {
-      return true;
-    }
-
-    /* 추후 지워야 할 경로들*/
-    if (path.equals("/api/members") || path.startsWith("/api/members")) {
-      return true;
-    }
-    if (path.equals("/api/membersave") || path.startsWith("/api/membersave")) {
-      return true;
-    }
-    if (path.equals("/api/deliveries") || path.startsWith("/api/deliveries")) {
-      return true;
-    }
-    if (path.equals("/api/cart") || path.startsWith("/api/cart")) {
-      return true;
-    }
-    if (path.equals("/api/orders") || path.startsWith("/api/orders")) {
-      return true;
-    }
-
-
-    return false;
+    return true;
   }
 
 
