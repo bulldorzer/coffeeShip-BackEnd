@@ -41,6 +41,8 @@ public class Member {
     @Enumerated(EnumType.STRING)
     private MemberShip memberShip;
 
+    @Enumerated(EnumType.STRING)
+    @Builder.Default
     private List<MemberRole> memberRoleList = new ArrayList();
 
     public void addRole(MemberRole memberRole){

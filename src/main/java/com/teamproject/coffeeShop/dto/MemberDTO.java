@@ -59,7 +59,7 @@ public class MemberDTO extends User {
         this.roleNames = roleNames;
     }
 
-    // 사용자 정보를 받아 Map형태로 변환하여 JWT토근 생성등에 사용
+    // 사용자 정보를 받아 Map형태로 변환하여 JWT토큰 생성 등에 사용
     public Map<String, Object> getClaims() {
         Map<String, Object> dataMap = new HashMap<>();
         dataMap.put("email", email);
