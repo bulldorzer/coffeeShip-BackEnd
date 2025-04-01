@@ -7,6 +7,7 @@ import com.teamproject.coffeeShop.dto.MemberDTO;
 import com.teamproject.coffeeShop.exception.NoDataFoundException;
 import com.teamproject.coffeeShop.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -20,6 +21,7 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
+@Log4j2
 public class MemberServiceImpl implements MemberService {
 
     private final MemberRepository memberRepository;
@@ -33,9 +35,12 @@ public class MemberServiceImpl implements MemberService {
                 .email(memberDTO.getEmail())
                 .pw(memberDTO.getPw())
                 .name(memberDTO.getName())
+                .phone(memberDTO.getPhone())
+                .point(memberDTO.getPoint())
                 .city(memberDTO.getCity())
                 .street(memberDTO.getStreet())
                 .zipcode(memberDTO.getZipcode())
+                .social(memberDTO.isSocial())
                 .memberShip(memberDTO.getMemberShip())
                 .memberRoleList(memberDTO.getRoleNames().stream()
                         .map(MemberRole::valueOf)
@@ -73,12 +78,17 @@ public class MemberServiceImpl implements MemberService {
         }
     }
 
+    @Transactional
     @Override
     public void updateMember(Long id, MemberDTO memberDTO) {
         Member searchMember = memberRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Member Not Found"));
 
-        searchMember.changeEmail(memberDTO.getEmail());
+        if (!searchMember.getEmail().equals(memberDTO.getEmail())) {
+            validateDuplicateMember(memberDTO);
+            searchMember.changeEmail(memberDTO.getEmail());
+        }
+
         searchMember.changeName(memberDTO.getName());
         searchMember.changePw(memberDTO.getPw());
         searchMember.changePhone(memberDTO.getPhone());

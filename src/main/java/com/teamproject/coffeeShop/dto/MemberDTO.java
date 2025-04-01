@@ -49,6 +49,10 @@ public class MemberDTO extends User {
                 : member.getMemberRoleList().stream().map(Enum::name).collect(Collectors.toList());
     }
 
+    public MemberDTO() {
+        super("default", "default", new ArrayList<>());
+    }
+
     public MemberDTO(String email, String pw, String name, boolean social, List<String> roleNames) {
         super(email, pw, roleNames.stream().map(str -> new SimpleGrantedAuthority("ROLE_" + str))
                 .collect(Collectors.toList()));
