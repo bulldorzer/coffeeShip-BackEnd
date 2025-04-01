@@ -84,7 +84,7 @@ public class CoffeeBeanServiceImpl implements CoffeeBeanService{
         if (coffeeBeanDTO.getPrice() != 0) searchCoffeeBean.setPrice(coffeeBeanDTO.getPrice());
         if (coffeeBeanDTO.getCountry() != null) searchCoffeeBean.setCountry(coffeeBeanDTO.getCountry());
         if (coffeeBeanDTO.getAmount() != null) searchCoffeeBean.setAmount(coffeeBeanDTO.getAmount());
-        if (coffeeBeanDTO.getStockQuantity() != 0) searchCoffeeBean.setStockQuantity(coffeeBeanDTO.getStockQuantity());
+        if (coffeeBeanDTO.getStockQty() != 0) searchCoffeeBean.setStockQty(coffeeBeanDTO.getStockQty());
         if (coffeeBeanDTO.getTaste() != null) searchCoffeeBean.setTaste(coffeeBeanDTO.getTaste());
 
         searchCoffeeBean.clearList();
@@ -121,7 +121,7 @@ public class CoffeeBeanServiceImpl implements CoffeeBeanService{
                 .price(coffeeBean.getPrice())
                 .country(coffeeBean.getCountry())
                 .amount(coffeeBean.getAmount())
-                .stockQuantity(coffeeBean.getStockQuantity())
+                .stockQty(coffeeBean.getStockQty())
                 .taste(coffeeBean.getTaste())
                 .delFlag(coffeeBean.isDelFlag())
                 .eventFlag(coffeeBean.isEventFlag())
@@ -145,7 +145,7 @@ public class CoffeeBeanServiceImpl implements CoffeeBeanService{
                 .price(coffeeBeanDTO.getPrice())
                 .country(coffeeBeanDTO.getCountry())
                 .amount(coffeeBeanDTO.getAmount())
-                .stockQuantity(coffeeBeanDTO.getStockQuantity())
+                .stockQty(coffeeBeanDTO.getStockQty())
                 .taste(coffeeBeanDTO.getTaste())
                 .delFlag(coffeeBeanDTO.isDelFlag())
                 .eventFlag(coffeeBeanDTO.isEventFlag())
