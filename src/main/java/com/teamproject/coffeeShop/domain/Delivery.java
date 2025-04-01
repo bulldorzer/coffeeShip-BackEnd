@@ -12,7 +12,6 @@ import lombok.*;
 @NoArgsConstructor
 public class Delivery {
 
-    public static Delivery builder;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "delivery_id")
