@@ -15,7 +15,7 @@ public class CoffeeBeanImage {
 
     private String fileName;    // 이미지 파일명
 
-    private int ord;            // 이미지 순서
+    private int ord;            // 이미지 순서 (ord = 0인 이미지 - 대표 이미지만 화면에 출력)
 
     public void setOrd(int ord){
         this.ord = ord;

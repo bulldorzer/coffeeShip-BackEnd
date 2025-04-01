@@ -28,7 +28,7 @@ public class CoffeeBeanDTO {
     private String amount;  // 원두 양(g)
 
     @JsonProperty("stockQty")
-    private int stockQuantity;  // 원두 재고량
+    private int stockQty;  // 원두 재고량
 
     private CoffeeBeanTaste taste;  // 원두 맛 (enum)
 
@@ -38,10 +38,12 @@ public class CoffeeBeanDTO {
 
     @JsonIgnore
     @Builder.Default
-    private List<MultipartFile> files = new ArrayList<>();      // 이미지 파일 리스트
+    // 서버에 보내지는 실제 파일 데이터의 리스트 - 사용자가 새로운 파일을 업로드할 때 사용
+    private List<MultipartFile> files = new ArrayList<>();
 
     @Builder.Default
-    private List<String> uploadFileNames = new ArrayList<>();   // 이미지 파일명 리스트
+    // 업로드된 파일의 이름만 문자열로 보관하는 리스트 - 데이터베이스에 파일 이름들을 처리하는 용도로 사용
+    private List<String> uploadFileNames = new ArrayList<>();
 
     // uploadFileNames 가져오기
     public List<String> getUploadFileNames() {

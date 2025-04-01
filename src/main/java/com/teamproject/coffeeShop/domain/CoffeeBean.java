@@ -24,7 +24,7 @@ public class CoffeeBean {
     private String country; // 원두 원산지 (from은 예약어로 사용 불가 -> country로 대체)
     private String amount;  // 원두 양(g)
 
-    private int stockQuantity;  // 원두 재고량
+    private int stockQty;  // 원두 재고량
 
     @Enumerated(EnumType.STRING)
     private CoffeeBeanTaste taste;  // 원두 맛 (enum)
@@ -38,17 +38,17 @@ public class CoffeeBean {
     private List<CoffeeBeanImage> imageList = new ArrayList<>();    // 원두 이미지(사진) 리스트
 
     // 재고 증가
-    public void addStock(int quantity) {
-        this.stockQuantity += quantity;
+    public void addStock(int qty) {
+        this.stockQty += qty;
     }
 
     // 재고 감소
-    public void removeStock(int quantity) {
-        int restStock = this.stockQuantity - quantity;
+    public void removeStock(int qty) {
+        int restStock = this.stockQty - qty;
         if (restStock < 0) {
             throw new NotEnoughStockException("need more stock");
         }
-        this.stockQuantity = restStock;
+        this.stockQty = restStock;
     }
 
     // imageList에 이미지 추가
@@ -87,8 +87,8 @@ public class CoffeeBean {
         this.amount = amount;
     }
 
-    public void changeStockQuantity(int stockQuantity) {
-        this.stockQuantity = stockQuantity;
+    public void changeStockQuantity(int stockQty) {
+        this.stockQty = stockQty;
     }
 
     public void changeTaste(CoffeeBeanTaste taste) {

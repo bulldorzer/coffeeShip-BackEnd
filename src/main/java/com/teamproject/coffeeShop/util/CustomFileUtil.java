@@ -26,12 +26,13 @@ import java.util.UUID;
 @Component
 @Log4j2
 @RequiredArgsConstructor
+// 파일 데이터 입출력 담당
 public class CustomFileUtil {
 
     @Value("${com.teamproject.coffeeShop.upload.path}")
     private String uploadPath;
 
-    // 객체 생성되면서 호출될 메서드 => 시작되면서 수행될 일
+    // 객체가 생성되면서 호출될 메서드 => 시작되면서 수행될 일
     @PostConstruct
     public void init() {
         File tempFolder = new File(uploadPath);
@@ -46,7 +47,7 @@ public class CustomFileUtil {
         log.info(uploadPath);
     }
 
-    // 파일저장
+    // 파일 저장
     public List<String> saveFiles(List<MultipartFile> files)throws RuntimeException{
 
         if(files == null || files.size() == 0){
@@ -84,7 +85,7 @@ public class CustomFileUtil {
         return uploadNames;
     }
 
-    // 업로드 사진보여주기
+    // 업로드 사진 보여주기 (컨트롤러에서 특정한 파일 조회할 때 사용)
     public ResponseEntity<Resource> getFile(String fileName) {
 
         Resource resource = new FileSystemResource(uploadPath+ File.separator + fileName);

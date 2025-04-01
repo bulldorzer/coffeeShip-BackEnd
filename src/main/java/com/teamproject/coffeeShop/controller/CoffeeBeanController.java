@@ -43,6 +43,7 @@ public class CoffeeBeanController {
     }
 
     @GetMapping("/view/{fileName}")
+    // 원하는 이미지 파일을 브라우저에서 볼 수 있음.
     public ResponseEntity<Resource> viewFileGET(@PathVariable String fileName){
         return fileUtil.getFile(fileName);
     }
