@@ -20,16 +20,21 @@ public class ReviewDTO {
     // 상품후기 게시판 아이디
     private Long reviewId;
 
+    // 후기 점수
+    private int score;
+
     // 상품후기 제목
     private String title;
 
     // 상품후기 내용
-    private String writer;
+    private String content;
 
     // 글쓴이
-    private String content;
+    private String writer;
 
     // 글쓴날짜
     private LocalDate postDate;
+
+
 
 }
