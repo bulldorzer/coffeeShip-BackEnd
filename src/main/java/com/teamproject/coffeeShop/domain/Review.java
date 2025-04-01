@@ -30,6 +30,9 @@ public class Review {
     @JoinColumn(name = "member_id")
     private Member member;
 
+    // 후기점수
+    private int score;
+
     // 게시판 제목
     private String title;
 
@@ -42,6 +45,9 @@ public class Review {
 
     // 게시판 등록날짜
     private LocalDate postDate;
+
+    // 점수수정
+    public void changeScore(int score) { this.score = score; }
 
     // 제목수정
     public void changeTitle(String title){
