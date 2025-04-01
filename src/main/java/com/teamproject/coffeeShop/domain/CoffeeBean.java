@@ -87,7 +87,7 @@ public class CoffeeBean {
         this.amount = amount;
     }
 
-    public void changeStockQuantity(int stockQty) {
+    public void changeStockQty(int stockQty) {
         this.stockQty = stockQty;
     }
 

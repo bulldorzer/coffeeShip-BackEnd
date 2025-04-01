@@ -25,7 +25,7 @@ public interface CoffeeBeanRepository extends JpaRepository<CoffeeBean, Long>{
     Optional<CoffeeBean> selectOne(@Param("coffeeBeanId") Long coffeeBeanId);
 
     // 원두 + 원두 이미지 페이징 처리
-    @Query("SELECT cb, il FROM CoffeeBean cb LEFT JOIN cb.imageList il ON il.ord = 0 WHERE cb.delFlag = false")
+    @Query("SELECT cb, cbi FROM CoffeeBean cb LEFT JOIN cb.imageList cbi ON cbi.ord = 0 WHERE cb.delFlag = false")
     Page<Object[]> selectList(Pageable pageable);
 
     // 고유번호가 맞는 원두의 delFlag 수정
