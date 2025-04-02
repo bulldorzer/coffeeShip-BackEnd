@@ -37,17 +37,23 @@ public class DeliveryController {
         return ResponseEntity.ok(deliveryService.getAllDeliveriesPaged(pageable));
     }
 
-    // 특정 배송 조회
+    // 특정 회원의 배송 조회
     @GetMapping("/{id}")
-    public ResponseEntity<Delivery> getDelivery(@PathVariable Long id) {
-        return ResponseEntity.ok(deliveryService.getDelivery(id));
+    public ResponseEntity<List<Delivery>> getDelivery(@PathVariable Long id) {
+        return ResponseEntity.ok(deliveryService.getDeliveries(id));
+    }
+
+    // 특정 회원의 특정 배송 조회
+    @GetMapping("/{memberId}/{deliveryId}")
+    public Delivery getDeliveryById(@PathVariable Long memberId, @PathVariable Long deliveryId) {
+        return deliveryService.getDeliveryById(memberId, deliveryId);
     }
 
     // 배송 정보 수정
     @PutMapping("/{id}")
-    public ResponseEntity<Delivery> updateDelivery(@PathVariable Long id, @RequestBody DeliveryDTO deliveryDTO) {
+    public ResponseEntity<List<Delivery>> updateDelivery(@PathVariable Long id, @RequestBody DeliveryDTO deliveryDTO) {
         deliveryService.updateDelivery(id, deliveryDTO);
-        return ResponseEntity.ok(deliveryService.getDelivery(id));
+        return ResponseEntity.ok(deliveryService.getDeliveries(id));
     }
 
     // 배송 삭제

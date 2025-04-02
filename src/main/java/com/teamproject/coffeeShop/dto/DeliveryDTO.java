@@ -21,6 +21,7 @@ public class DeliveryDTO {
     private String street;
     private String zipcode;
     private DeliveryStatus status;
+    private Long memberId;
 
     public DeliveryDTO(Delivery delivery) {
         this.deliveryId = delivery.getId();
@@ -30,5 +31,6 @@ public class DeliveryDTO {
         this.street = delivery.getStreet();
         this.zipcode = delivery.getZipcode();
         this.status = delivery.getStatus();
+        this.memberId = delivery.getMember().getId();
     }
 }
