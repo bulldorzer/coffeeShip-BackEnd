@@ -39,6 +39,7 @@ public class PfaqServiceImpl implements PfaqService{
         // PfaqDTO를 pfaq로 변환
         Pfaq pfaq = modelMapper.map(pfaqDTO,Pfaq.class);
 
+        // 대답상태가 null 일때 CHECK로 변환
         if (pfaq.getAnswer()==null){
             pfaq.changeAnswer(Answer.CHECK);
         }
@@ -125,8 +126,11 @@ public class PfaqServiceImpl implements PfaqService{
         // 자료형 변경 Optional -> Pfqa
         Pfaq pfaq = result.orElseThrow();
 
+        // 대답상태가 체크일때 응답상태로 변경 만약 대답상태가 응답일때에는 예외처리
         if (pfaq.getAnswer() == Answer.CHECK){
             pfaq.changeAnswer(Answer.RESPONSE);
+        }else {
+            throw new IllegalArgumentException("이미 응답완료된 문의입니다.");
         }
 
         pfaqRepository.save(pfaq);

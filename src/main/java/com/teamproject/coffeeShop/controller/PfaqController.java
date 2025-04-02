@@ -23,7 +23,7 @@ public class PfaqController {
 
     // 상품문의 글 등록
     @PostMapping("/")
-    public  ResponseEntity<Map<String,Long>> register(@RequestBody PfaqDTO pfaqDTO){
+    public ResponseEntity<Map<String,Long>> register(@RequestBody PfaqDTO pfaqDTO){
         log.info("PfaqDTO: "+pfaqDTO);
 
         Long pfaqId = pfaqService.register(pfaqDTO);
@@ -38,10 +38,8 @@ public class PfaqController {
     }
 
     // 상품문의 전체 목록보기 - 페이징처리
-    @GetMapping("list")
-    public ResponseEntity<CustomPage<PfaqDTO>>
-    list(@PageableDefault(page = 0,size = 10)Pageable pageable){
-
+    @GetMapping("/list")
+    public ResponseEntity<CustomPage<PfaqDTO>> list(@PageableDefault(page = 0,size = 10)Pageable pageable){
         return ResponseEntity.ok(pfaqService.getAllPfaqs(pageable));
     }
 
