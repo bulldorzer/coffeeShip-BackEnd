@@ -8,6 +8,7 @@ import com.teamproject.coffeeShop.dto.CartCoffeeBeanDTO;
 import com.teamproject.coffeeShop.dto.CartCoffeeBeanListDTO;
 import com.teamproject.coffeeShop.repository.CartCoffeeBeanRepository;
 import com.teamproject.coffeeShop.repository.CartRepository;
+import com.teamproject.coffeeShop.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
@@ -22,6 +23,7 @@ import java.util.Optional;
 public class CartServiceImpl implements CartService{
 
     private final CartRepository cartRepository;
+    private final MemberRepository memberRepository;
     private final CartCoffeeBeanRepository cartCoffeeBeanRepository;
 
     @Override
@@ -70,7 +72,9 @@ public class CartServiceImpl implements CartService{
         
         // 장바구니가 없으면 장바구니 생성
         if(result.isEmpty()){
-            Member member = Member.builder().email(email).build();
+            Member member = memberRepository.findByEmail(email)
+                    .orElseThrow(() -> new RuntimeException("Member not found")); // ✅ DB에서 조회 (직접 생성 시 에러 발생 가능)
+
             Cart tempCart = Cart.builder().member(member).build();
             cart = cartRepository.save(tempCart);
         } else{
