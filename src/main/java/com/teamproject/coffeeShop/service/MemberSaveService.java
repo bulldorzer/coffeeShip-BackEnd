@@ -7,7 +7,7 @@ import java.util.List;
 // 관심상품Service
 public interface MemberSaveService {
     // 관심상품 목록 조회
-    CustomPage<MemberSaveListDTO> getListMemberSave(Pageable pageable);
+    CustomPage<MemberSaveListDTO> getListMemberSave(Long id, Pageable pageable);
     // 관심상품 추가
     Long addCoffeeBeans(MemberSaveDTO memberSaveDTO);
     // 관심상품 삭제
