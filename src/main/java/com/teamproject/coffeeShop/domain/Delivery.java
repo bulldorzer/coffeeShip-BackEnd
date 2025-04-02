@@ -17,6 +17,7 @@ public class Delivery {
     @Column(name = "delivery_id")
     private Long id;
 
+
     private String shipper;
     private String request;
 
@@ -27,5 +28,8 @@ public class Delivery {
     @Enumerated(EnumType.STRING)
     private DeliveryStatus status;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "member_id")
+    private Member member;
 
 }
