@@ -12,19 +12,20 @@ import org.springframework.web.bind.annotation.*;
 
 // 관심상품Controller - 이재민
 @RestController
-@RequestMapping("/api/memberSave")
+@RequestMapping("/api/membersave")
 @RequiredArgsConstructor
 public class MemberSaveController {
 
     private final MemberSaveService memberSaveService;
 
     // 관심상품 전체 조회
-    @GetMapping("/list")
+    @GetMapping("/list/{id}")
     public ResponseEntity<CustomPage<MemberSaveListDTO>> getAllMemberSave(
+            @PathVariable(name = "id") Long id,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size) {
         Pageable pageable = PageRequest.of(page, size);
-        return ResponseEntity.ok(memberSaveService.getListMemberSave(pageable));
+        return ResponseEntity.ok(memberSaveService.getListMemberSave(id, pageable));
     }
 
     // 관심상품 추가

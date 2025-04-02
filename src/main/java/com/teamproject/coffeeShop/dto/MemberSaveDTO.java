@@ -1,21 +1,19 @@
 package com.teamproject.coffeeShop.dto;
 
 import com.teamproject.coffeeShop.domain.MemberSave;
-import lombok.Getter;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 // 관심상품DTO - 이재민
-@Getter
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class MemberSaveDTO {
 
     private Long memberSaveId;
     private Long memberId;
-    private Long cfbId;
-    private Long cartId;
+    private Long coffeeBeanId;
 
-    public void MemberSaveDTO(MemberSave memberSave) {
-        this.memberSaveId = memberSave.getId();
-        this.memberId = memberSave.getId();
-        this.cfbId = memberSave.getId();
-        this.cartId = memberSave.getId();
-    }
+
 }
