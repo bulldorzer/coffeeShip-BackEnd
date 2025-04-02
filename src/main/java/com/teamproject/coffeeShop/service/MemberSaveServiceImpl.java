@@ -77,7 +77,7 @@ public class MemberSaveServiceImpl implements MemberSaveService{
 
     private MemberSave getMemberSave(Long memberId) {
         MemberSave memberSave = null;
-        Optional<MemberSave> result = memberSaveRepository.findByMemberId(memberId); // memberId로 관심상품 목록 찾기
+        Optional<MemberSave> result = memberSaveRepository.getMemberSave(memberId); // memberId로 관심상품 목록 찾기
 
         // 관심상품 목록이 없으면 새로운 MemberSave 생성
         if(result.isEmpty()){

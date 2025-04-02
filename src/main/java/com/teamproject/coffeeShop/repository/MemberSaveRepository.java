@@ -16,7 +16,4 @@ public interface MemberSaveRepository extends JpaRepository<MemberSave, Long> {
     @Query("SELECT ms FROM MemberSave ms WHERE ms.member.id = :memberId")
     public Optional<MemberSave> getMemberSave(@Param("memberId") Long id);
 
-    // 회원의 memberId로 관심상품을 조회
-    @Query("select ms from MemberSave ms where ms.member.id = :memberId")
-    Optional<MemberSave> findByMemberId(@Param("memberId") Long memberId);
 }
