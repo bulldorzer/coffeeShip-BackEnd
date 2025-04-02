@@ -68,11 +68,14 @@ public class CustomSecurityConfig {
   http.authorizeHttpRequests(authz -> {
     authz
             .requestMatchers("/api/members/**").permitAll() // 로그인 화면
-            .requestMatchers("/api/membersave/**").permitAll() // 로그인 화면
-            .requestMatchers("/api/deliveries/**").permitAll() // 배달여부
-            .requestMatchers("/api/cart/**").permitAll() // 배달여부
-            .requestMatchers("/api/coffeeBeans/**").permitAll() // 배달여부
-            .requestMatchers("/api/orders/**").permitAll() //  주문목록
+            .requestMatchers("/api/membersave/**").permitAll() // 관심상품 화면
+            .requestMatchers("/api/deliveries/**").permitAll() // 배달여부 화면
+            .requestMatchers("/api/cart/**").permitAll() // 장바구니 화면
+            .requestMatchers("/api/coffeeBeans/**").permitAll() // 상품화면
+            .requestMatchers("/api/orders/**").permitAll() //  주문서 화면
+            .requestMatchers("/api/review/**").permitAll() //  주문후기 화면
+            .requestMatchers("/api/cfaq/**").permitAll() //  고객문의 화면
+            .requestMatchers("/api/pfaq/**").permitAll() //  상품문의 화면
             .requestMatchers("/api/categories/**").permitAll() // 카테고리 목록
             .requestMatchers("/api/admin/**").hasAnyRole("MANAGER", "ADMIN") // 관리자 화면
             .anyRequest().authenticated();

@@ -2,10 +2,7 @@ package com.teamproject.coffeeShop.domain;
 
 // 회원 엔티티 - 이재민
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,6 +12,7 @@ import java.util.List;
 @NoArgsConstructor
 @Getter
 @Builder
+@ToString(exclude = "memberRoleList")
 public class Member {
 
     @Id
@@ -41,7 +39,10 @@ public class Member {
     @Enumerated(EnumType.STRING)
     private MemberShip memberShip;
 
-    private List<MemberRole> memberRoleList = new ArrayList();
+    @ElementCollection(fetch = FetchType.LAZY)
+    @Enumerated(EnumType.STRING)
+    @Builder.Default
+    private List<MemberRole> memberRoleList = new ArrayList<>();
 
     public void addRole(MemberRole memberRole){
         if(this.memberRoleList == null) {

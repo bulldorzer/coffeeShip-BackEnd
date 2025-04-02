@@ -18,18 +18,23 @@ import java.time.LocalDate;
 public class ReviewDTO {
 
     // 상품후기 게시판 아이디
-    private Long reviewId;
+    private Long id;
+
+    // 후기 점수
+    private int score;
 
     // 상품후기 제목
     private String title;
 
-    // 상품후기 내용
+    // 글쓴이
     private String writer;
 
-    // 글쓴이
+    // 상품후기 내용
     private String content;
 
     // 글쓴날짜
     private LocalDate postDate;
+
+
 
 }
