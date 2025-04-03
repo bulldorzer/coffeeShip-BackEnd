@@ -22,11 +22,15 @@ public class PfaqController {
     private final PfaqService pfaqService;
 
     // 상품문의 글 등록
-    @PostMapping("/")
-    public ResponseEntity<Map<String,Long>> register(@RequestBody PfaqDTO pfaqDTO){
-        log.info("PfaqDTO: "+pfaqDTO);
+    @PostMapping("/{memberId}/{coffeeBeanId}")
+    public ResponseEntity<Map<String,Long>> register(
+            @PathVariable Long memberId,
+            @PathVariable Long coffeeBeanId,
+            @RequestBody PfaqDTO pfaqDTO){
 
-        Long pfaqId = pfaqService.register(pfaqDTO);
+        log.info("MemberId: " + memberId+ " || CoffeeBeanId: " + coffeeBeanId+ " || ReviewDTO: " + pfaqDTO);
+
+        Long pfaqId = pfaqService.register(memberId,coffeeBeanId,pfaqDTO);
 
         return ResponseEntity.ok(Map.of("RESULT",pfaqId));
     }

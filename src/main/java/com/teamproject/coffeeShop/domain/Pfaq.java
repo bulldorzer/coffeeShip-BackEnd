@@ -20,12 +20,12 @@ public class Pfaq {
     private Long id;
 
     // FK 설정 coffeeBean_id 참조
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "coffeeBean_id")
     private CoffeeBean coffeeBean;
 
     // FK 설정 member_id 참조
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
     private Member member;
 
@@ -66,4 +66,15 @@ public class Pfaq {
 
     // 답변상태 변경
     public void changeAnswer(Answer answer) { this.answer = answer;}
+
+
+    // Member 엔티티 수정
+    public void changeMember(Member member){
+        this.member = member;
+    }
+
+    // CoffeeBean 엔티티 수정
+    public void changeCoffeeBean(CoffeeBean coffeeBean){
+        this.coffeeBean = coffeeBean;
+    }
 }

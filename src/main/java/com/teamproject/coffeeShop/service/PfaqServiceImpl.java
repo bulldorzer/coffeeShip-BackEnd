@@ -1,9 +1,13 @@
 package com.teamproject.coffeeShop.service;
 
 import com.teamproject.coffeeShop.domain.Answer;
+import com.teamproject.coffeeShop.domain.CoffeeBean;
+import com.teamproject.coffeeShop.domain.Member;
 import com.teamproject.coffeeShop.domain.Pfaq;
 import com.teamproject.coffeeShop.dto.CustomPage;
 import com.teamproject.coffeeShop.dto.PfaqDTO;
+import com.teamproject.coffeeShop.repository.CoffeeBeanRepository;
+import com.teamproject.coffeeShop.repository.MemberRepository;
 import com.teamproject.coffeeShop.repository.PfaqRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -25,11 +29,23 @@ public class PfaqServiceImpl implements PfaqService{
 
     private final ModelMapper modelMapper;
     private final PfaqRepository pfaqRepository;
+    private final MemberRepository memberRepository;
+    private final CoffeeBeanRepository coffeeBeanRepository;
 
     // 상품문의 글 등록
     @Override
-    public Long register(PfaqDTO pfaqDTO) {
+    public Long register(Long memberId, Long coffeeBeanId, PfaqDTO pfaqDTO) {
         log.info("Pfaq board register");
+
+        // 멤버아이디, 아이템아이디를 받아 멤버,아이템 엔티티 가져옴
+        Member member  = memberRepository.findById(memberId).orElseThrow(
+                ()->new IllegalArgumentException("해당 회원은 존재하지 않습니다.")
+        );
+
+
+        CoffeeBean coffeeBean = coffeeBeanRepository.findById(coffeeBeanId).orElseThrow(
+                ()->new IllegalArgumentException("해당 상품은 존재하지 않습니다")
+        );
 
         // PostDate가 null이면 오늘 날짜로 설정
         if (pfaqDTO.getPostDate() == null){
@@ -38,6 +54,10 @@ public class PfaqServiceImpl implements PfaqService{
 
         // PfaqDTO를 pfaq로 변환
         Pfaq pfaq = modelMapper.map(pfaqDTO,Pfaq.class);
+
+        // Review에 member,coffeeBean 값설정
+        pfaq.changeMember(member);
+        pfaq.changeCoffeeBean(coffeeBean);
 
         // 대답상태가 null 일때 CHECK로 변환
         if (pfaq.getAnswer()==null){
