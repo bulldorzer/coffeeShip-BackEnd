@@ -3,6 +3,7 @@ package com.teamproject.coffeeShop.dto;
 import com.teamproject.coffeeShop.domain.OrderStatus;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -28,6 +29,19 @@ public class OrderDTO {
     private String city;
     private String street;
     private String zipcode;
+
+    // ✅ Setter 추가
+    public void setCity(String city) {
+        this.city = city;
+    }
+
+    public void setStreet(String street) {
+        this.street = street;
+    }
+
+    public void setZipcode(String zipcode) {
+        this.zipcode = zipcode;
+    }
 
     // DTO 초기화 생성자
     public OrderDTO(
