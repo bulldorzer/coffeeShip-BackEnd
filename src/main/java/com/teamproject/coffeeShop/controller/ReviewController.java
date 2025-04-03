@@ -22,12 +22,15 @@ public class ReviewController {
     private final ReviewService reviewService;
 
     // 리뷰글등록
-    @PostMapping("/")
-    public ResponseEntity<Map<String, Long>> register(@RequestBody ReviewDTO reviewDTO){
+    @PostMapping("/{memberId}/{coffeeBeanId}")
+    public ResponseEntity<Map<String, Long>> register(
+            @PathVariable Long memberId,
+            @PathVariable Long coffeeBeanId,
+            @RequestBody ReviewDTO reviewDTO){
 
-        log.info("ReviewDTO: " + reviewDTO);
+        log.info("MemberId: " + memberId+ " || CoffeeBeanId: " + coffeeBeanId+ " || ReviewDTO: " + reviewDTO);
 
-        Long reviewId = reviewService.register(reviewDTO);
+        Long reviewId = reviewService.register(memberId,coffeeBeanId,reviewDTO);
 
         return ResponseEntity.ok(Map.of("RESULT", reviewId));
     }

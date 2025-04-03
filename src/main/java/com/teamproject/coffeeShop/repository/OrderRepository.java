@@ -6,6 +6,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -21,8 +22,8 @@ public interface OrderRepository extends JpaRepository<Order,Long> {
     List<Order> findByOrderDate(LocalDate beforeDate);
 
     // ✅ EntityGraph를 활용한 Lazy Loading 최적화 (N+1 문제 해결)
-    @EntityGraph(attributePaths = {"member", "delivery"})
-    @Query("SELECT o FROM Order o")
-    Page<Order> findAll(Pageable pageable);
+    @EntityGraph(attributePaths = {"member"})
+    @Query("SELECT o FROM Order o WHERE o.member.Id = :memberId")
+    Page<Order> findAllByMemberId(@Param("memberId") Long memberId,Pageable pageable);
 
 }

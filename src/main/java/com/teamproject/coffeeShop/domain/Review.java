@@ -21,12 +21,12 @@ public class Review {
     private Long id;
 
     // FK coffeeBean_id 참조
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "coffeeBean_id")
     private CoffeeBean coffeeBean;
 
     // FK member_id 참조
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
     private Member member;
 
@@ -65,4 +65,13 @@ public class Review {
         this.postDate = postDate;
     }
 
+    // Member 엔티티 수정
+    public void changeMember(Member member){
+        this.member = member;
+    }
+
+    // CoffeeBean 엔티티 수정
+    public void changeCoffeeBean(CoffeeBean coffeeBean){
+        this.coffeeBean = coffeeBean;
+    }
 }
