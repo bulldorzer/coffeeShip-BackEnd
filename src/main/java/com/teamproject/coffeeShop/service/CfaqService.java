@@ -8,7 +8,7 @@ import org.springframework.data.domain.Pageable;
 // 고객 문의 게시판 - 진우 
 public interface CfaqService {
     // 상품문의 글 등록
-    public Long register(CfaqDTO cfaqDTO);
+    public Long register(Long memberId,CfaqDTO cfaqDTO);
 
     // 상품문의글 상세보기
     public CfaqDTO getCfaq (Long cfaqId);

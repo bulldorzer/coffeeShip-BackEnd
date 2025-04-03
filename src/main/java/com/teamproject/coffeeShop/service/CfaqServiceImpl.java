@@ -2,9 +2,11 @@ package com.teamproject.coffeeShop.service;
 
 import com.teamproject.coffeeShop.domain.Answer;
 import com.teamproject.coffeeShop.domain.Cfaq;
+import com.teamproject.coffeeShop.domain.Member;
 import com.teamproject.coffeeShop.dto.CfaqDTO;
 import com.teamproject.coffeeShop.dto.CustomPage;
 import com.teamproject.coffeeShop.repository.CfaqRepository;
+import com.teamproject.coffeeShop.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.modelmapper.ModelMapper;
@@ -26,12 +28,18 @@ public class CfaqServiceImpl implements CfaqService{
 
     private final ModelMapper modelMapper;
     private final CfaqRepository cfaqRepository;
+    private final MemberRepository memberRepository;
 
     // 고객문의 글등록
     @Override
-    public Long register(CfaqDTO cfaqDTO) {
+    public Long register(Long memberId,CfaqDTO cfaqDTO) {
 
         log.info("Cfaq board register");
+
+        // 멤버아이디를 받아 멤버엔티티 가져옴
+        Member member  = memberRepository.findById(memberId).orElseThrow(
+                ()->new IllegalArgumentException("해당 회원은 존재하지 않습니다.")
+        );
 
         // postDate가 null이면 오늘 날짜로 설정
         if (cfaqDTO.getPostDate()==null){
@@ -45,6 +53,10 @@ public class CfaqServiceImpl implements CfaqService{
         if (cfaq.getAnswer()==null){
             cfaq.changeAnswer(Answer.CHECK);
         }
+        
+        // Cfaq에 member 값설정
+        cfaq.changeMember(member);
+        
         // Cfaq 데이터 DB에 저장
         Cfaq saveCfaq = cfaqRepository.save(cfaq);
 
