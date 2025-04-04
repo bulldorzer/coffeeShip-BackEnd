@@ -39,30 +39,30 @@ public class RootConfig {
     });
 
     // Member -> MemberDTO 매핑 규칙 추가
-    modelMapper.addMappings(new PropertyMap<Member, MemberDTO>() {
-      @Override
-      protected void configure() {
-        // 기본 필드 매핑
-        map(source.getEmail(), destination.getEmail());
-        map(source.getName(), destination.getName());
-        map(source.getPw(), destination.getPw());
-        map(source.getPhone(), destination.getPhone());
-        map(source.getPoint(), destination.getPoint());
-        map(source.getCity(), destination.getCity());
-        map(source.getStreet(), destination.getStreet());
-        map(source.getZipcode(), destination.getZipcode());
-        map(source.isSocial(), destination.isSocial());
-        using(ctx -> ctx.getSource() == null ? null : ctx.getSource().toString())
-                .map(source.getMemberShip(), destination.getMemberShip());
-
-        // RoleList 매핑
-        // MemberRole 리스트를 List<String>로 변환
-        using(ctx -> ((List<MemberRole>) ctx.getSource()).stream()
-                .map(Enum::name)
-                .collect(Collectors.toList()))
-                .map(source.getMemberRoleList(), destination.getRoleNames());
-      }
-    });
+//    modelMapper.addMappings(new PropertyMap<Member, MemberDTO>() {
+//      @Override
+//      protected void configure() {
+//        // 기본 필드 매핑
+//        map(source.getEmail(), destination.getEmail());
+//        map(source.getName(), destination.getName());
+//        map(source.getPw(), destination.getPw());
+//        map(source.getPhone(), destination.getPhone());
+//        map(source.getPoint(), destination.getPoint());
+//        map(source.getCity(), destination.getCity());
+//        map(source.getStreet(), destination.getStreet());
+//        map(source.getZipcode(), destination.getZipcode());
+//        map(source.isSocial(), destination.isSocial());
+//        using(ctx -> ctx.getSource() == null ? null : ctx.getSource().toString())
+//                .map(source.getMemberShip(), destination.getMemberShip());
+//
+//        // RoleList 매핑
+//        // MemberRole 리스트를 List<String>로 변환
+//        using(ctx -> ((List<MemberRole>) ctx.getSource()).stream()
+//                .map(Enum::name)
+//                .collect(Collectors.toList()))
+//                .map(source.getMemberRoleList(), destination.getRoleNames());
+//      }
+//    });
 
     return modelMapper;
   }
