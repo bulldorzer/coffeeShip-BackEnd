@@ -2,6 +2,7 @@ package com.teamproject.coffeeShop.service;
 
 import com.teamproject.coffeeShop.domain.Member;
 import com.teamproject.coffeeShop.domain.MemberRole;
+import com.teamproject.coffeeShop.domain.MemberShip;
 import com.teamproject.coffeeShop.dto.CustomPage;
 import com.teamproject.coffeeShop.dto.MemberDTO;
 import com.teamproject.coffeeShop.exception.NoDataFoundException;
@@ -41,7 +42,7 @@ public class MemberServiceImpl implements MemberService {
                 .street(memberDTO.getStreet())
                 .zipcode(memberDTO.getZipcode())
                 .social(memberDTO.isSocial())
-                .memberShip(memberDTO.getMemberShip())
+                .memberShip(MemberShip.BRONZE)
                 .memberRoleList(memberDTO.getRoleNames().stream()
                         .map(MemberRole::valueOf)
                         .collect(Collectors.toList())).build();

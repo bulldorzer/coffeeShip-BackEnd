@@ -27,7 +27,7 @@ public class MemberDTO extends User {
     private String street;
     private String zipcode;
     private boolean social;
-    private MemberShip memberShip;
+    private String memberShip;
     private List<String> roleNames = new ArrayList<>();
 
     public MemberDTO(Member member){
@@ -43,7 +43,7 @@ public class MemberDTO extends User {
         this.street = member.getStreet();
         this.zipcode = member.getZipcode();
         this.social = member.isSocial();
-        this.memberShip = member.getMemberShip();
+        this.memberShip = member.getMemberShip().name();
         this.roleNames = (member.getMemberRoleList() == null)
                 ? new ArrayList<>()
                 : member.getMemberRoleList().stream().map(Enum::name).collect(Collectors.toList());
