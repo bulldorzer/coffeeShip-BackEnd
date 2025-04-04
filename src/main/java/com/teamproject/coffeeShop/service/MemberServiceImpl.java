@@ -15,6 +15,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -108,4 +110,6 @@ public class MemberServiceImpl implements MemberService {
             throw new IllegalArgumentException("이미 존재하는 회원");
         }
     }
+
+
 }
