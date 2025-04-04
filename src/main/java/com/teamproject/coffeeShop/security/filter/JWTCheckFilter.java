@@ -31,7 +31,7 @@ public class JWTCheckFilter extends OncePerRequestFilter {
     String path = request.getRequestURI();
 
     log.info("check uri.............." + path);
-//
+//    진우 가 일부러 잠궈둠
 //    /* 서비스하면서 토큰체크 하지 않는 서비스들 */
 //    if (path.equals("/api/coffeeBeans") || path.startsWith("/api/coffeeBeans")) {
 //      return true;
@@ -66,7 +66,7 @@ public class JWTCheckFilter extends OncePerRequestFilter {
 //      return true;
 //    }
 
-
+// false로 바꿔야함
     return true;
   }
 
