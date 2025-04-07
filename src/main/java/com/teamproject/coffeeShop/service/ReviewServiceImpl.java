@@ -1,9 +1,9 @@
 package com.teamproject.coffeeShop.service;
 
-import com.teamproject.coffeeShop.domain.Review;
+import com.teamproject.coffeeShop.domain.*;
 import com.teamproject.coffeeShop.dto.CustomPage;
 import com.teamproject.coffeeShop.dto.ReviewDTO;
-import com.teamproject.coffeeShop.repository.ReviewRepository;
+import com.teamproject.coffeeShop.repository.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.modelmapper.ModelMapper;
@@ -24,11 +24,23 @@ public class ReviewServiceImpl implements ReviewService{
 
     private final ModelMapper modelMapper;
     private final ReviewRepository reviewRepository;
+    private final MemberRepository memberRepository;
+    private final CoffeeBeanRepository coffeeBeanRepository;
 
     // 리뷰 등록
     @Override
-    public Long register(ReviewDTO reviewDTO) {
+    public Long register(Long memberId, Long coffeeBeanId, ReviewDTO reviewDTO) {
         log.info("Review Board register");
+
+        // 멤버아이디, 아이템아이디를 받아 멤버,아이템 엔티티 가져옴
+        Member member  = memberRepository.findById(memberId).orElseThrow(
+                ()->new IllegalArgumentException("해당 회원은 존재하지 않습니다.")
+        );
+
+
+        CoffeeBean coffeeBean = coffeeBeanRepository.findById(coffeeBeanId).orElseThrow(
+                ()->new IllegalArgumentException("해당 상품은 존재하지 않습니다")
+        );
 
         // postDate가 null이면 오늘 날짜로 설정
         if (reviewDTO.getPostDate() == null) {
@@ -37,6 +49,10 @@ public class ReviewServiceImpl implements ReviewService{
 
         // ReviewDTO를 Review 엔티티로 변환
         Review review = modelMapper.map(reviewDTO,Review.class);
+        
+        // Review에 member,coffeeBean 값설정
+        review.changeMember(member);
+        review.changeCoffeeBean(coffeeBean);
 
         // Review 데이터 DB에 저장
         Review savedReview = reviewRepository.save(review);
@@ -109,6 +125,15 @@ public class ReviewServiceImpl implements ReviewService{
     @Override
     public void remove(Long reviewId) {
         log.info("Review Board remove");
+
+        Review review = reviewRepository.findById(reviewId).orElseThrow(
+                ()->new IllegalArgumentException("해당 리뷰는 존재하지 않습니다.")
+        );
+        
+        // 멤버와 원두간의 연결 해재후 데이터 삭제
+        review.changeMember(null);
+        review.changeCoffeeBean(null);
+
         reviewRepository.deleteById(reviewId);
 
     }

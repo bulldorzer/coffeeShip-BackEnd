@@ -2,11 +2,9 @@ package com.teamproject.coffeeShop.service;
 
 import com.teamproject.coffeeShop.domain.*;
 import com.teamproject.coffeeShop.dto.CustomPage;
+import com.teamproject.coffeeShop.dto.DeliveryDTO;
 import com.teamproject.coffeeShop.dto.OrderDTO;
-import com.teamproject.coffeeShop.repository.CoffeeBeanRepository;
-import com.teamproject.coffeeShop.repository.MemberRepository;
-import com.teamproject.coffeeShop.repository.OrderCoffeeBeanRepository;
-import com.teamproject.coffeeShop.repository.OrderRepository;
+import com.teamproject.coffeeShop.repository.*;
 import com.teamproject.coffeeShop.exception.NoDataFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -18,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 
@@ -32,20 +31,32 @@ public class OrderServiceImpl implements OrderService{
     private final OrderCoffeeBeanRepository orderCoffeeBeanRepository;
     private final CoffeeBeanRepository coffeeBeanRepository;
     private final MemberRepository memberRepository;
+    private final DeliveryRepository deliveryRepository;
+
+    private final DeliveryService deliveryService;
     private final ModelMapper modelMapper;
     
     // 주문서 생성 (아이템 추가 X)
     @Override
-    public Long createOrder(Long memberId) {
+    public Long createOrder(Long memberId, DeliveryDTO deliveryDTO) {
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(()-> new IllegalArgumentException("해당 회원이 존재하지 않습니다."));
         
         // 배달 주소,상태 초기화
-        Delivery delivery = new Delivery();
-        delivery.setCity(member.getCity());
-        delivery.setStreet(member.getStreet());
-        delivery.setZipcode(member.getZipcode());
-        delivery.setStatus(DeliveryStatus.READY);
+//        Delivery delivery = new Delivery();
+//        delivery.setShipper(deliveryDTO.getShipper());
+//        delivery.setRequest(deliveryDTO.getRequest());
+//        delivery.setCity(deliveryDTO.getCity());
+//        delivery.setStreet(deliveryDTO.getStreet());
+//        delivery.setZipcode(deliveryDTO.getZipcode());
+//        delivery.setStatus(DeliveryStatus.READY);
+//        delivery.setMember(member);
+//        deliveryRepository.save(delivery);
+        Long deliveryId = deliveryService.createDelivery(deliveryDTO);
+        Optional<Delivery> result = deliveryRepository.findById(deliveryId);
+        Delivery delivery = result.orElseThrow();
+
+
         
         // 주문서 상태 초기화
         Order order = new Order();
@@ -82,7 +93,7 @@ public class OrderServiceImpl implements OrderService{
         return orderCoffeeBeanRepository.save(orderCoffeeBean);
     }
 
-    // 전체주문 조회
+    // 전체주문서 조회 사용하지 않음(확장성을 위해 놔둠)
     @Override
     @Transactional(readOnly = true) // 읽기만 가능 수정,삭제 X
     public List<OrderDTO> getAllOrders() {
@@ -94,11 +105,12 @@ public class OrderServiceImpl implements OrderService{
                 .collect(Collectors.toList());
     }
 
-    // 전체 주문 상품 페이징처리
+    // 전체 주문서 페이징처리
     @Override
-    public CustomPage<OrderDTO> getAllCoffeeBeansPaged(Pageable pageable) {
+    public CustomPage<OrderDTO> getAllCoffeeBeansPaged(Pageable pageable, Long memberId) {
+
         // order엔티티를 페이징 처리된 데이터 전체 조회
-        Page<Order> orderPage = orderRepository.findAll(pageable);
+        Page<Order> orderPage = orderRepository.findAllByMemberId(memberId, pageable);
 
         // 조회된 페이지가 없으면 예외처리
         if (orderPage.isEmpty()) throw new NoDataFoundException("조회된 데이터가 존재하지 않습니다.");
@@ -113,7 +125,7 @@ public class OrderServiceImpl implements OrderService{
         return CustomPage.of(dtoPage,groupSize);
     }
 
-    // 특정 주문 아이템 삭제(취소)
+    // 특정 주문서 삭제(취소)
     @Override
     public void cancelOrderCoffeeBean(Long orderCoffeeBeanId) {
 
@@ -128,7 +140,7 @@ public class OrderServiceImpl implements OrderService{
 
     }
 
-    // 전체 주문 취소
+    // 전체 주문서 취소
     @Override
     public void cancelAllOrderCoffeeBeans(Long orderId) {
 

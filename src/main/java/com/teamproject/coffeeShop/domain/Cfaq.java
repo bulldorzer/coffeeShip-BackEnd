@@ -20,7 +20,7 @@ public class Cfaq {
     private Long id;
 
     // FK member_id 참조
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
     private Member member;
 
@@ -61,4 +61,9 @@ public class Cfaq {
 
     // 답변상태 변경
     public void changeAnswer(Answer answer) { this.answer = answer;}
+
+    // Member 엔티티 수정
+    public void changeMember(Member member){
+        this.member = member;
+    }
 }

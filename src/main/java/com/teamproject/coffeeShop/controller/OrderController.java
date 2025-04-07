@@ -1,7 +1,9 @@
 package com.teamproject.coffeeShop.controller;
 
+import com.teamproject.coffeeShop.domain.Member;
 import com.teamproject.coffeeShop.domain.OrderCoffeeBean;
 import com.teamproject.coffeeShop.dto.CustomPage;
+import com.teamproject.coffeeShop.dto.DeliveryDTO;
 import com.teamproject.coffeeShop.dto.OrderDTO;
 import com.teamproject.coffeeShop.service.OrderService;
 import lombok.RequiredArgsConstructor;
@@ -21,30 +23,31 @@ import java.util.Map;
 public class OrderController {
     private final OrderService orderService;
 
-    // 전체 주문 조회 페이징 처리
-    @GetMapping("/list")
-    public ResponseEntity<CustomPage<OrderDTO>>
-    getOrders(@PageableDefault(page = 0, size = 10) Pageable pageable) {
-        return ResponseEntity.ok(orderService.getAllCoffeeBeansPaged(pageable));
-    }
-
     // 주문 생성
     @PostMapping("/{memberId}")
-    public ResponseEntity<Long> createOrder(@PathVariable Long memberId) {
-        return ResponseEntity.ok(orderService.createOrder(memberId));
+    public ResponseEntity<Long> createOrder(@PathVariable Long memberId, @RequestBody DeliveryDTO deliveryDTO) {
+        return ResponseEntity.ok(orderService.createOrder(memberId, deliveryDTO));
+    }
+
+    // 전체 주문 조회 페이징 처리
+    @GetMapping("/list/{memberId}")
+    public ResponseEntity<CustomPage<OrderDTO>>
+    getOrders(@PageableDefault(page = 0, size = 10) Pageable pageable,
+              @PathVariable(name = "memberId") Long memberId) {
+        return ResponseEntity.ok(orderService.getAllCoffeeBeansPaged(pageable, memberId));
     }
 
     // 주문서에 아이템 추가
-    @PostMapping("/{orderId}/coffebean")
+    @PostMapping("/{orderId}/coffeeBean")
     public ResponseEntity<OrderCoffeeBean> addOrderItem(
             @PathVariable Long orderId,
-            @RequestParam Long itemId,
+            @RequestParam Long coffeeBeanId,
             @RequestParam int qty) {
-        return ResponseEntity.ok(orderService.addOrderCoffeeBean(orderId, itemId, qty));
+        return ResponseEntity.ok(orderService.addOrderCoffeeBean(orderId, coffeeBeanId, qty));
     }
 
     // 특정 주문 아이템 취소
-    @DeleteMapping("/items/{orderCoffeeBeanId}")
+    @DeleteMapping("/coffeebean/{orderCoffeeBeanId}")
     public ResponseEntity<Map<String, Object>> removeOrderItem(@PathVariable Long orderCoffeeBeanId) {
         Map<String, Object> response = new HashMap<>();
         try {

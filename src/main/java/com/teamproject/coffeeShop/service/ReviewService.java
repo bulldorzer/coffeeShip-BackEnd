@@ -9,7 +9,7 @@ import org.springframework.data.domain.Pageable;
 public interface ReviewService {
 
     // 상품 후기글 등록
-    public Long register(ReviewDTO reviewDTO);
+    public Long register(Long memberId, Long coffeeBeanId, ReviewDTO reviewDTO);
 
     // 상품 후기글 상세보기
     public ReviewDTO getReview (Long reviewId);

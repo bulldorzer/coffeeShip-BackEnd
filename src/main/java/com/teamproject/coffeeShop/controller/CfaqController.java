@@ -22,13 +22,15 @@ public class CfaqController {
     private final CfaqService cfaqService;
     
     // 고객문의 글등록
-    @PostMapping("/")
-    public ResponseEntity<Map<String,Long>> register(@RequestBody CfaqDTO cfaqDTO){
+    @PostMapping("/{memberId}")
+    public ResponseEntity<Map<String,Long>> register(
+            @PathVariable Long memberId,
+            @RequestBody CfaqDTO cfaqDTO){
 
         try {
-            log.info("CfaqDTO: "+cfaqDTO);
+            log.info("MemberId: " + memberId+ " || CfaqDTO: "+cfaqDTO);
 
-            Long cfaqId = cfaqService.register(cfaqDTO);
+            Long cfaqId = cfaqService.register(memberId,cfaqDTO);
 
             return ResponseEntity.ok(Map.of("RESULT", cfaqId));
         } catch (Exception e) {

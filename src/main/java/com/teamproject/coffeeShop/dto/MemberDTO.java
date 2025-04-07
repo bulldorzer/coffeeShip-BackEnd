@@ -27,7 +27,7 @@ public class MemberDTO extends User {
     private String street;
     private String zipcode;
     private boolean social;
-    private MemberShip memberShip;
+    private String memberShip;
     private List<String> roleNames = new ArrayList<>();
 
     public MemberDTO(Member member){
@@ -43,7 +43,7 @@ public class MemberDTO extends User {
         this.street = member.getStreet();
         this.zipcode = member.getZipcode();
         this.social = member.isSocial();
-        this.memberShip = member.getMemberShip();
+        this.memberShip = member.getMemberShip().name();
         this.roleNames = (member.getMemberRoleList() == null)
                 ? new ArrayList<>()
                 : member.getMemberRoleList().stream().map(Enum::name).collect(Collectors.toList());
@@ -64,15 +64,5 @@ public class MemberDTO extends User {
     }
 
     // 사용자 정보를 받아 Map형태로 변환하여 JWT토큰 생성 등에 사용
-    public Map<String, Object> getClaims() {
-        Map<String, Object> dataMap = new HashMap<>();
-        dataMap.put("email", email);
-        dataMap.put("pw", pw);
-        dataMap.put("name", name);
-        dataMap.put("social", social);
-        dataMap.put("roleNames", roleNames);
 
-        return dataMap;
-
-    }
 }
