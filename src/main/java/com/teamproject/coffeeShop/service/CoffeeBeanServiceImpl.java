@@ -1,10 +1,15 @@
 package com.teamproject.coffeeShop.service;
 
+import com.teamproject.coffeeShop.domain.Category;
+import com.teamproject.coffeeShop.domain.CategoryCoffeeBean;
 import com.teamproject.coffeeShop.domain.CoffeeBean;
 import com.teamproject.coffeeShop.domain.CoffeeBeanImage;
 import com.teamproject.coffeeShop.dto.CoffeeBeanDTO;
+import com.teamproject.coffeeShop.repository.CategoryCoffeeBeanRepository;
+import com.teamproject.coffeeShop.repository.CategoryRepository;
 import com.teamproject.coffeeShop.repository.CoffeeBeanRepository;
 import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -20,6 +25,9 @@ import java.util.stream.Collectors;
 public class CoffeeBeanServiceImpl implements CoffeeBeanService{
 
     private final CoffeeBeanRepository coffeeBeanRepository;
+    private final CategoryRepository categoryRepository;
+    private final CategoryCoffeeBeanRepository categoryCoffeeBeanRepository;
+    private final ModelMapper modelMapper;
 
     @Override
     // 전체 원두 수 반환
@@ -37,7 +45,7 @@ public class CoffeeBeanServiceImpl implements CoffeeBeanService{
             CoffeeBean coffeeBean = (CoffeeBean) arr[0];
             CoffeeBeanImage coffeeBeanImage = (arr[1] != null) ? (CoffeeBeanImage) arr[1] : null;
 
-            CoffeeBeanDTO coffeeBeanDTO = entityToDTO(coffeeBean);
+            CoffeeBeanDTO coffeeBeanDTO = modelMapper.map(coffeeBean, CoffeeBeanDTO.class);
             String imageFileName = (coffeeBeanImage != null) ? coffeeBeanImage.getFileName() : "default.png";
             coffeeBeanDTO.setUploadFileNames(List.of(imageFileName));
 
@@ -47,18 +55,45 @@ public class CoffeeBeanServiceImpl implements CoffeeBeanService{
 
     @Override
     // 고유번호로 원두 가져오기
-    public CoffeeBeanDTO getCoffeeBean(Long id) {
+    public CoffeeBeanDTO getCoffeeBeanById(Long id) {
         CoffeeBean coffeeBean = coffeeBeanRepository.selectOne(id)
-                .orElseThrow(() -> new RuntimeException("CoffeeBean Not Found"));
-        return entityToDTO(coffeeBean);
+                .orElseThrow(() -> new RuntimeException("존재하지 않는 원두입니다."));
+        return modelMapper.map(coffeeBean, CoffeeBeanDTO.class);
+    }
+
+    @Override
+    // 이름으로 원두 가져오기
+    public List<CoffeeBeanDTO> getCoffeeBeansByName(String name) {
+        return coffeeBeanRepository.findByName(name).stream()
+                .map(coffeeBean -> modelMapper.map(coffeeBean, CoffeeBeanDTO.class))
+                .collect(Collectors.toList());
     }
 
     @Transactional
     @Override
     // 받아온 원두를 저장
     public Long saveCoffeeBean(CoffeeBeanDTO coffeeBeanDTO) {
-        CoffeeBean coffeeBean = dtoToEntity(coffeeBeanDTO);
+
+        CoffeeBean coffeeBean = modelMapper.map(coffeeBeanDTO, CoffeeBean.class);
         CoffeeBean savedCoffeeBean = coffeeBeanRepository.save(coffeeBean);
+
+        // 카테고리 연동
+        List<Long> categoryIds = coffeeBeanDTO.getCategoryIds();
+        if (categoryIds != null && !categoryIds.isEmpty()) {
+            for (Long categoryId : categoryIds) {
+                Category category = categoryRepository.findById(categoryId)
+                        .orElseThrow(() -> new RuntimeException("존재하지 않는 카테고리입니다."));
+                CategoryCoffeeBean link = new CategoryCoffeeBean(category, savedCoffeeBean);
+                categoryCoffeeBeanRepository.save(link);
+            }
+        }
+
+        // 이미지 리스트 매핑
+        List<String> uploadFileNames = coffeeBeanDTO.getUploadFileNames();
+        if (uploadFileNames != null && !uploadFileNames.isEmpty()) {
+            uploadFileNames.forEach(coffeeBean::addImageString);
+        }
+
         return savedCoffeeBean.getId();
     }
 
@@ -67,9 +102,10 @@ public class CoffeeBeanServiceImpl implements CoffeeBeanService{
     // 고유번호로 원두를 삭제
     public void deleteCoffeeBean(Long id) {
         if (coffeeBeanRepository.existsById(id)) {
-            coffeeBeanRepository.updateToDelete(id, true);
+            categoryCoffeeBeanRepository.deleteByCoffeeBeanId(id);  // 원두 삭제 시 카테고리 연결도 함께 삭제
+            coffeeBeanRepository.updateToDelete(id, true);     // Soft Delete
         } else {
-            throw new RuntimeException("Item not found");
+            throw new RuntimeException("존재하지 않는 원두입니다.");
         }
     }
 
@@ -78,8 +114,10 @@ public class CoffeeBeanServiceImpl implements CoffeeBeanService{
     // 고유번호로 원두를 수정
     public void updateCoffeeBean(Long id, CoffeeBeanDTO coffeeBeanDTO) {
 
-        CoffeeBean searchCoffeeBean = coffeeBeanRepository.findById(id).orElseThrow();
+        CoffeeBean searchCoffeeBean = coffeeBeanRepository.findById(id).orElseThrow(
+                () -> new RuntimeException("존재하지 않는 원두입니다."));
 
+        // 필드 수정
         if (coffeeBeanDTO.getName() != null) searchCoffeeBean.setName(coffeeBeanDTO.getName());
         if (coffeeBeanDTO.getPrice() != 0) searchCoffeeBean.setPrice(coffeeBeanDTO.getPrice());
         if (coffeeBeanDTO.getCountry() != null) searchCoffeeBean.setCountry(coffeeBeanDTO.getCountry());
@@ -90,20 +128,26 @@ public class CoffeeBeanServiceImpl implements CoffeeBeanService{
         searchCoffeeBean.clearList();
         coffeeBeanRepository.save(searchCoffeeBean);
 
+        // 이미지 갱신
         List<String> uploadFileNames = coffeeBeanDTO.getUploadFileNames();
         if (uploadFileNames != null && !uploadFileNames.isEmpty()) {
             uploadFileNames.forEach(searchCoffeeBean::addImageString);
         }
 
-        coffeeBeanRepository.save(searchCoffeeBean);
-    }
+        // 기존 카테고리 연결 제거
+        categoryCoffeeBeanRepository.deleteByCoffeeBeanId(id);
 
-    @Override
-    // 이름으로 원두 가져오기
-    public List<CoffeeBeanDTO> getCoffeeBeansByName(String name) {
-        return coffeeBeanRepository.findByName(name).stream()
-                .map(this::entityToDTO)
-                .collect(Collectors.toList());
+        // 새로운 카테고리 연결 추가
+        List<Long> categoryIds = coffeeBeanDTO.getCategoryIds();
+        if (categoryIds != null && !categoryIds.isEmpty()) {
+            for (Long categoryId : categoryIds) {
+                Category category = categoryRepository.findById(categoryId)
+                        .orElseThrow(() -> new RuntimeException("존재하지 않는 카테고리입니다."));
+                CategoryCoffeeBean link = new CategoryCoffeeBean(category, searchCoffeeBean);
+                categoryCoffeeBeanRepository.save(link);
+            }
+        }
+
     }
 
     @Override
@@ -112,52 +156,4 @@ public class CoffeeBeanServiceImpl implements CoffeeBeanService{
         return coffeeBeanRepository.existsById(id);
     }
 
-    // 엔티티 -> DTO 변환 메서드
-    private CoffeeBeanDTO entityToDTO(CoffeeBean coffeeBean) {
-
-        CoffeeBeanDTO coffeeBeanDTO = CoffeeBeanDTO.builder()
-                .id(coffeeBean.getId())
-                .name(coffeeBean.getName())
-                .price(coffeeBean.getPrice())
-                .country(coffeeBean.getCountry())
-                .amount(coffeeBean.getAmount())
-                .stockQty(coffeeBean.getStockQty())
-                .taste(coffeeBean.getTaste())
-                .delFlag(coffeeBean.isDelFlag())
-                .eventFlag(coffeeBean.isEventFlag())
-                .grindFlag(coffeeBean.isGrindFlag())
-                .build();
-
-        List<String> fileNameList = coffeeBean.getImageList().stream()
-                .map(CoffeeBeanImage::getFileName)
-                .collect(Collectors.toList());
-
-        coffeeBeanDTO.setUploadFileNames(fileNameList);
-
-        return coffeeBeanDTO;
-    }
-
-    // DTO -> 엔티티 변환 메서드
-    private CoffeeBean dtoToEntity(CoffeeBeanDTO coffeeBeanDTO) {
-
-        CoffeeBean coffeeBean = CoffeeBean.builder()
-                .name(coffeeBeanDTO.getName())
-                .price(coffeeBeanDTO.getPrice())
-                .country(coffeeBeanDTO.getCountry())
-                .amount(coffeeBeanDTO.getAmount())
-                .stockQty(coffeeBeanDTO.getStockQty())
-                .taste(coffeeBeanDTO.getTaste())
-                .delFlag(coffeeBeanDTO.isDelFlag())
-                .eventFlag(coffeeBeanDTO.isEventFlag())
-                .grindFlag(coffeeBeanDTO.isGrindFlag())
-                .build();
-
-        List<String> uploadFileNames = coffeeBeanDTO.getUploadFileNames();
-
-        if (uploadFileNames != null && !uploadFileNames.isEmpty()) {
-            uploadFileNames.forEach(coffeeBean::addImageString);
-        }
-
-        return coffeeBean;
-    }
 }

@@ -39,7 +39,7 @@ public class CoffeeBeanController {
     // 단일 상품 조회
     @GetMapping("/{id}")
     public ResponseEntity<CoffeeBeanDTO> getCoffeeBean(@PathVariable Long id) {
-        return ResponseEntity.ok(coffeeBeanService.getCoffeeBean(id));
+        return ResponseEntity.ok(coffeeBeanService.getCoffeeBeanById(id));
     }
 
     @GetMapping("/view/{fileName}")
@@ -48,7 +48,7 @@ public class CoffeeBeanController {
         return fileUtil.getFile(fileName);
     }
 
-    // 상품 등록 (파일 업로드 포함)
+    // 상품 등록 (파일 업로드, 카테고리 연동 포함)
     @PostMapping("/add")
     public ResponseEntity<Long> createCoffeeBean(@ModelAttribute CoffeeBeanDTO coffeeBeanDTO) {
         // 파일 업로드
@@ -83,7 +83,7 @@ public class CoffeeBeanController {
         }
 
         // 기존 아이템 정보 가져오기
-        CoffeeBeanDTO oldCoffeeBeanDTO = coffeeBeanService.getCoffeeBean(id);
+        CoffeeBeanDTO oldCoffeeBeanDTO = coffeeBeanService.getCoffeeBeanById(id);
 
         // 기존 파일 목록 (DB에 저장된 파일들 - 삭제되었을 가능성 있음)
         List<String> oldFileNames = oldCoffeeBeanDTO.getUploadFileNames();
