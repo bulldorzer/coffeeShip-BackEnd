@@ -36,6 +36,8 @@ public class CoffeeBeanDTO {
     private boolean eventFlag;  // 이벤트 상품 여부
     private boolean grindFlag;  // 원두 분쇄 여부
 
+    private List<Long> categoryIds;     // 연동할 카테고리 고유번호 목록(추가)
+
     @JsonIgnore
     @Builder.Default
     // 서버에 보내지는 실제 파일 데이터의 리스트 - 사용자가 새로운 파일을 업로드할 때 사용

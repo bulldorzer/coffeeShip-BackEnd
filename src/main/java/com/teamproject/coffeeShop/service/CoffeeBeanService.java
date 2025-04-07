@@ -8,13 +8,16 @@ import java.util.List;
 public interface CoffeeBeanService {
 
     // 전체 원두 수 반환
-    public int getAllCoffeeBeansSize();
+    int getAllCoffeeBeansSize();
 
     // 전체 원두 목록 조회(페이징 포함)
     List<CoffeeBeanDTO> getAllCoffeeBeans(Pageable pageable);
 
     // 고유번호로 원두 가져오기
-    CoffeeBeanDTO getCoffeeBean(Long id);
+    CoffeeBeanDTO getCoffeeBeanById(Long id);
+
+    // 이름으로 원두 가져오기
+    List<CoffeeBeanDTO> getCoffeeBeansByName(String name);
 
     // 받아온 원두를 저장
     Long saveCoffeeBean(CoffeeBeanDTO coffeeBeanDTO);
@@ -24,9 +27,6 @@ public interface CoffeeBeanService {
 
     // 고유번호로 원두를 수정
     void updateCoffeeBean(Long id, CoffeeBeanDTO coffeeBeanDTO);
-
-    // 이름으로 원두 가져오기
-    List<CoffeeBeanDTO> getCoffeeBeansByName(String name);
 
     // 고유번호가 존재하는지 확인
     boolean existsById(Long id);

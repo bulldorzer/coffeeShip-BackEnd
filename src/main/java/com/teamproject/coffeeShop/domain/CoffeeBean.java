@@ -29,7 +29,7 @@ public class CoffeeBean {
     @Enumerated(EnumType.STRING)
     private CoffeeBeanTaste taste;  // 원두 맛 (enum)
 
-    private boolean delFlag;    // 화면 표시 여부
+    private boolean delFlag;    // 삭제 여부 (Soft Delete)
     private boolean eventFlag;  // 이벤트 상품 여부
     private boolean grindFlag;  // 원두 분쇄 여부
 
