@@ -18,6 +18,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 @Log4j2
+@CrossOrigin(origins = "http://localhost:5173")
 @RestController
 @RequestMapping("/api/coffeeBeans")
 @RequiredArgsConstructor
