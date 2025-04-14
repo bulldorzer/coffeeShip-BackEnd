@@ -17,4 +17,6 @@ public interface MemberService {
     void updateMember(Long id, MemberDTO memberDTO);
     // 회원 존재 여부 확인
     boolean existsById(Long id);
+    // 로그인 임시 코드
+    boolean login(String email, String pw);
 }
