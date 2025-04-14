@@ -104,6 +104,19 @@ public class MemberServiceImpl implements MemberService {
         return memberRepository.existsById(id);
     }
 
+    // 회원가입 임시 코드
+    @Override
+    public boolean login(String email, String pw) {
+        Member member = memberRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("존재하지 않는 회원입니다."));
+
+        if (!member.getPw().equals(pw)) {
+            throw new RuntimeException("비밀번호가 일치하지 않음");
+        }
+        return true;
+    }
+
+
     private void validateDuplicateMember(MemberDTO memberDTO) {
         Optional<Member> foundMember = memberRepository.findByEmail(memberDTO.getEmail());
         if(foundMember.isPresent()) {
