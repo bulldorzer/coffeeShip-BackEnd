@@ -22,7 +22,7 @@ public class CfaqServiceTests {
                     .writer("jinwoo"+(2+i))
                     .content("배송이 너무안와요.").build();
 
-            cfaqService.register(cfaqDTO);
+            cfaqService.register(1L,cfaqDTO);
         }
     }
 }

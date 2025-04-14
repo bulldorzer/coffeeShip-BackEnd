@@ -22,7 +22,7 @@ public class PfaqServiceTests {
                     .writer("jinwoo"+(3+i))
                     .content("원두상태가 이상해요.").build();
 
-            pfaqService.register(pfaqDTO);
+            pfaqService.register(1L,1L,pfaqDTO);
         }
     }
 }

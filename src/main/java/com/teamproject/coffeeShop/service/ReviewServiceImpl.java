@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Optional;
 
 /* 상품후기 게시판 구현 - 진우 */
@@ -91,6 +92,24 @@ public class ReviewServiceImpl implements ReviewService{
 
         // 엔티티 -> DTO 변환
         Page<ReviewDTO> dtoPage = reviewPage.map(review -> modelMapper.map(review,ReviewDTO.class));
+        log.info("=======<ReviewDTO Page>=======");
+        log.info(dtoPage.getContent());
+
+        // DTO 페이지 네이션 정보 추가( 별도의 DTO 만들기)
+        int groupSize = 10;
+        return CustomPage.of(dtoPage,groupSize);
+    }
+
+    // 특정 상품에 대한 리뷰 보기
+    @Override
+    public CustomPage<ReviewDTO> getReviewsByCoffeeBeanId(Long coffeeBeanId, Pageable pageable) {
+        Page<Review> result = reviewRepository.findByCoffeeBean_Id(coffeeBeanId, pageable);
+
+        // 조회된 페이지 없으면 예외처리
+        if (result.isEmpty()) throw new IllegalArgumentException("조회된 데이터가 존재하지 않습니다.");
+
+        // 엔티티 -> DTO 변환
+        Page<ReviewDTO> dtoPage = result.map(review -> modelMapper.map(review,ReviewDTO.class));
         log.info("=======<ReviewDTO Page>=======");
         log.info(dtoPage.getContent());
 

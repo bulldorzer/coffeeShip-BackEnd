@@ -23,4 +23,7 @@ public interface ReviewService {
     // 전체 상품 후기 목록 조회(페이징 포함)
     public CustomPage<ReviewDTO> getAllReviews(Pageable pageable);
 
+    // 특정 상품에 대한 리뷰 보기
+    public CustomPage<ReviewDTO> getReviewsByCoffeeBeanId(Long coffeeBeanId, Pageable pageable);
+
 }
