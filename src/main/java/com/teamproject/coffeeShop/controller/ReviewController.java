@@ -42,10 +42,19 @@ public class ReviewController {
         return ResponseEntity.ok(reviewService.getReview(reviewId));
     }
 
+    // 특정 상품에 대한 리뷰 보기
+    @GetMapping("/list/product/{coffeeBeanId}")
+    public ResponseEntity<CustomPage<ReviewDTO>> getReviewsByCoffeeBean(
+            @PathVariable Long coffeeBeanId,
+            @PageableDefault(page = 0, size = 6) Pageable pageable) {
+
+        return ResponseEntity.ok(reviewService.getReviewsByCoffeeBeanId(coffeeBeanId, pageable));
+    }
+
     // 리뷰 전체목록 보기 - 페이징 처리
     @GetMapping("/list")
     public ResponseEntity<CustomPage<ReviewDTO>>
-    list(@PageableDefault(page = 0, size = 10)Pageable pageable) {
+    list(@PageableDefault(page = 0, size = 6)Pageable pageable) {
 
         return ResponseEntity.ok(reviewService.getAllReviews(pageable));
     }

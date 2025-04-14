@@ -23,7 +23,7 @@ public class ReviewServiceTests {
                 .writer("jinwoo")
                 .content("이런저런후기").build();
 
-        Long result =reviewService.register(reviewDTO);
+        Long result =reviewService.register(1L,1L,reviewDTO);
 
         log.info("등록된 리뷰 아이디 "+result);
 
@@ -39,7 +39,7 @@ public class ReviewServiceTests {
                     .writer("jinwoo"+6+i)
                     .content("이런저런후기").build();
 
-            Long result =reviewService.register(reviewDTO);
+            Long result =reviewService.register(1L,1L,reviewDTO);
         }
     }
 
