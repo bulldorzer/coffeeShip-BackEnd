@@ -37,11 +37,10 @@ public class CoffeeBeanServiceImpl implements CoffeeBeanService{
 
     @Override
     // 전체 원두 목록 조회 (페이징 포함)
-    public List<CoffeeBeanDTO> getAllCoffeeBeans(Pageable pageable) {
-
+    public Page<CoffeeBeanDTO> getAllCoffeeBeans(Pageable pageable) {
         Page<Object[]> result = coffeeBeanRepository.selectList(pageable);
 
-        return result.get().map(arr -> {
+        return result.map(arr -> {
             CoffeeBean coffeeBean = (CoffeeBean) arr[0];
             CoffeeBeanImage coffeeBeanImage = (arr[1] != null) ? (CoffeeBeanImage) arr[1] : null;
 
@@ -50,7 +49,7 @@ public class CoffeeBeanServiceImpl implements CoffeeBeanService{
             coffeeBeanDTO.setUploadFileNames(List.of(imageFileName));
 
             return coffeeBeanDTO;
-        }).collect(Collectors.toList());
+        });
     }
 
     @Override
