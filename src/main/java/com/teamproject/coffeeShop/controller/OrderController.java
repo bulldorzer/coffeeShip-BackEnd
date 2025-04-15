@@ -5,6 +5,7 @@ import com.teamproject.coffeeShop.domain.OrderCoffeeBean;
 import com.teamproject.coffeeShop.dto.CustomPage;
 import com.teamproject.coffeeShop.dto.DeliveryDTO;
 import com.teamproject.coffeeShop.dto.OrderDTO;
+import com.teamproject.coffeeShop.dto.OrderDetailsDTO;
 import com.teamproject.coffeeShop.service.OrderService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -14,6 +15,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -61,6 +63,11 @@ public class OrderController {
             response.put("status", "error");
             return ResponseEntity.status(404).body(response);
         }
+    }
+
+    @GetMapping("/details/{memberId}")
+    public List<OrderDetailsDTO> getOrderDetails(@PathVariable Long memberId) {
+        return orderService.getOrderDetails(memberId);
     }
 
 //    // 전체 주문 취소

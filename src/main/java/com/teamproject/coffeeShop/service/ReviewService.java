@@ -26,4 +26,6 @@ public interface ReviewService {
     // 특정 상품에 대한 리뷰 보기
     public CustomPage<ReviewDTO> getReviewsByCoffeeBeanId(Long coffeeBeanId, Pageable pageable);
 
+    // 특정 멤버가 작성한 리뷰 리스트 조회
+    public CustomPage<ReviewDTO> getReviewsByMemberId(Long memberId, Pageable pageable);
 }

@@ -12,6 +12,7 @@ import lombok.extern.log4j.Log4j2;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -29,6 +30,7 @@ public class MemberServiceImpl implements MemberService {
 
     private final MemberRepository memberRepository;
     private final ModelMapper modelMapper;
+    private final PasswordEncoder passwordEncoder;
 
     @Transactional
     @Override
@@ -36,7 +38,7 @@ public class MemberServiceImpl implements MemberService {
         validateDuplicateMember(memberDTO);
         Member member = Member.builder()
                 .email(memberDTO.getEmail())
-                .pw(memberDTO.getPw())
+                .pw(passwordEncoder.encode(memberDTO.getPw()))
                 .name(memberDTO.getName())
                 .phone(memberDTO.getPhone())
                 .point(memberDTO.getPoint())
@@ -116,6 +118,12 @@ public class MemberServiceImpl implements MemberService {
         return true;
     }
 
+    @Override
+    public MemberDTO getMemberByEmail(String email) {
+        Member member = memberRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("회원이 존재하지 않습니다."));
+        return modelMapper.map(member, MemberDTO.class);
+    }
 
     private void validateDuplicateMember(MemberDTO memberDTO) {
         Optional<Member> foundMember = memberRepository.findByEmail(memberDTO.getEmail());

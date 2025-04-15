@@ -1,6 +1,7 @@
 package com.teamproject.coffeeShop.repository;
 
 import com.teamproject.coffeeShop.domain.Order;
+import com.teamproject.coffeeShop.dto.OrderDetailsDTO;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.EntityGraph;
@@ -25,5 +26,11 @@ public interface OrderRepository extends JpaRepository<Order,Long> {
     @EntityGraph(attributePaths = {"member"})
     @Query("SELECT o FROM Order o WHERE o.member.Id = :memberId")
     Page<Order> findAllByMemberId(@Param("memberId") Long memberId,Pageable pageable);
+
+    // 마이페이지 주문내역 확인
+    @Query("SELECT oc.order.id, oc.order.orderDate, oc.order.status, oc.name, oc.orderPrice, oc.qty " +
+            "FROM OrderCoffeeBean oc " +
+            "WHERE oc.order.member.id = :memberId")
+    List<Object[]> findOrderDetailsByMember(@Param("memberId") Long memberId);
 
 }

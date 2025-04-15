@@ -118,6 +118,20 @@ public class ReviewServiceImpl implements ReviewService{
         return CustomPage.of(dtoPage,groupSize);
     }
 
+    // 특정 멤버가 작성한 리뷰 리스트 조회
+    @Override
+    public CustomPage<ReviewDTO> getReviewsByMemberId(Long memberId, Pageable pageable) {
+        Page<Review> result = reviewRepository.findByMemberId(memberId, pageable);
+
+        if (result.isEmpty()) {
+            throw new IllegalArgumentException("조회된 데이터가 없습니다.");
+        }
+
+        Page<ReviewDTO> dtoPage = result.map(review -> modelMapper.map(review, ReviewDTO.class));
+        int groupSize = 10;
+        return CustomPage.of(dtoPage, groupSize);
+    }
+
     // 리뷰 내용 수정
     @Override
     public void modify(ReviewDTO reviewDTO) {

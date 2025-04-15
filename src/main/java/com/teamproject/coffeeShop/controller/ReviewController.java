@@ -51,6 +51,15 @@ public class ReviewController {
         return ResponseEntity.ok(reviewService.getReviewsByCoffeeBeanId(coffeeBeanId, pageable));
     }
 
+    // 특정 멤버가 작성한 리뷰 리스트 조회
+    @GetMapping("/member/{memberId}")
+    public ResponseEntity<CustomPage<ReviewDTO>> getReviewsByMember(
+            @PathVariable Long memberId,
+            @PageableDefault(size = 6) Pageable pageable) {
+
+        return ResponseEntity.ok(reviewService.getReviewsByMemberId(memberId, pageable));
+    }
+
     // 리뷰 전체목록 보기 - 페이징 처리
     @GetMapping("/list")
     public ResponseEntity<CustomPage<ReviewDTO>>
