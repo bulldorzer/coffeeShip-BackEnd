@@ -64,6 +64,12 @@ public class MemberController {
         return ResponseEntity.noContent().build();
     }
 
+    // 마이페이지에서 쓸 DTO 추출
+    @GetMapping("/me/{email}")
+    public ResponseEntity<MemberDTO> getMemberByEmail(@PathVariable String email) {
+        return ResponseEntity.ok(memberService.getMemberByEmail(email));
+    }
+
 //    // 로그인 임시 코드
 //    @PostMapping("/login")
 //    public ResponseEntity<String> login(@RequestBody LoginRequest loginRequest) {

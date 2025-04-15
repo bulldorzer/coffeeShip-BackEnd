@@ -19,4 +19,7 @@ public interface MemberService {
     boolean existsById(Long id);
     // 로그인 임시 코드
     boolean login(String email, String pw);
+
+    // email로 조회
+    public MemberDTO getMemberByEmail(String email);
 }

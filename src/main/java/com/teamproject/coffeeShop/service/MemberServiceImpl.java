@@ -118,6 +118,12 @@ public class MemberServiceImpl implements MemberService {
         return true;
     }
 
+    @Override
+    public MemberDTO getMemberByEmail(String email) {
+        Member member = memberRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("회원이 존재하지 않습니다."));
+        return modelMapper.map(member, MemberDTO.class);
+    }
 
     private void validateDuplicateMember(MemberDTO memberDTO) {
         Optional<Member> foundMember = memberRepository.findByEmail(memberDTO.getEmail());
