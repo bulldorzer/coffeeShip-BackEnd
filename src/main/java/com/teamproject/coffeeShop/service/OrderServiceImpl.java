@@ -4,6 +4,7 @@ import com.teamproject.coffeeShop.domain.*;
 import com.teamproject.coffeeShop.dto.CustomPage;
 import com.teamproject.coffeeShop.dto.DeliveryDTO;
 import com.teamproject.coffeeShop.dto.OrderDTO;
+import com.teamproject.coffeeShop.dto.OrderDetailsDTO;
 import com.teamproject.coffeeShop.repository.*;
 import com.teamproject.coffeeShop.exception.NoDataFoundException;
 import lombok.RequiredArgsConstructor;
@@ -15,6 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -162,5 +164,28 @@ public class OrderServiceImpl implements OrderService{
             orderCoffeeBeanRepository.delete(orderCoffeeBean);
         }
 
+    }
+
+    @Override
+    public List<OrderDetailsDTO> getOrderDetails(Long memberId) {
+        List<Object[]> results = orderRepository.findOrderDetailsByMember(memberId);
+        List<OrderDetailsDTO> orderDetailsList = new ArrayList<>();
+
+        for (Object[] result : results) {
+            // Object[]에서 각각의 값을 추출
+            Long orderId = (Long) result[0];  // 주문 아이디
+            LocalDate orderDate = (LocalDate) result[1];
+            String status = result[2].toString();
+            String coffeeName = (String) result[3];
+            int orderPrice = (int) result[4];
+            int qty = (int) result[5];
+            int totalPrice = orderPrice * qty;
+
+            // DTO 객체로 변환
+            OrderDetailsDTO orderDetailsDTO = new OrderDetailsDTO(orderId, orderDate, status, coffeeName, totalPrice, qty);
+            orderDetailsList.add(orderDetailsDTO);
+        }
+
+        return orderDetailsList;
     }
 }
