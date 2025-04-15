@@ -6,6 +6,7 @@ import com.teamproject.coffeeShop.util.CustomFileUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.core.io.Resource;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
@@ -30,11 +31,11 @@ public class CoffeeBeanController {
 
     // 전체 상품 조회 (페이징 지원)
     @GetMapping("/list")
-    public ResponseEntity<List<CoffeeBeanDTO>> getAllCoffeeBeans(
+    public Page<CoffeeBeanDTO> getAllCoffeeBeans(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size) {
         Pageable pageable = PageRequest.of(page, size);
-        return ResponseEntity.ok(coffeeBeanService.getAllCoffeeBeans(pageable));
+        return coffeeBeanService.getAllCoffeeBeans(pageable);
     }
 
     // 단일 상품 조회

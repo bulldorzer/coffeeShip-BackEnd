@@ -1,6 +1,7 @@
 package com.teamproject.coffeeShop.service;
 
 import com.teamproject.coffeeShop.dto.CoffeeBeanDTO;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 import java.util.List;
@@ -11,7 +12,7 @@ public interface CoffeeBeanService {
     int getAllCoffeeBeansSize();
 
     // 전체 원두 목록 조회(페이징 포함)
-    List<CoffeeBeanDTO> getAllCoffeeBeans(Pageable pageable);
+    Page<CoffeeBeanDTO> getAllCoffeeBeans(Pageable pageable);
 
     // 고유번호로 원두 가져오기
     CoffeeBeanDTO getCoffeeBeanById(Long id);

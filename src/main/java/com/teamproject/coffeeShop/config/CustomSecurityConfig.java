@@ -52,7 +52,7 @@ public class CustomSecurityConfig {
     http.csrf(config -> config.disable());
 
     http.formLogin(config -> {
-      config.loginPage("/api/member/login"); // 로그인 페이지 매핑
+      config.loginPage("/api/members/login"); // 로그인 페이지 매핑
       config.successHandler(new APILoginSuccessHandler()); // 로그인 후처리
       config.failureHandler(new APILoginFailHandler()); // 로그인 실패 처리
     });
