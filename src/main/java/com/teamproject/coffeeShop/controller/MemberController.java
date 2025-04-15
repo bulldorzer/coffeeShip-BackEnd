@@ -6,6 +6,7 @@ import com.teamproject.coffeeShop.dto.MemberDTO;
 import com.teamproject.coffeeShop.repository.MemberRepository;
 import com.teamproject.coffeeShop.service.MemberService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/api/members")
 @RequiredArgsConstructor
+@Log4j2
 public class MemberController {
 
     private final MemberService memberService;
@@ -62,19 +64,20 @@ public class MemberController {
         return ResponseEntity.noContent().build();
     }
 
-    // 로그인 임시 코드
-    @PostMapping("/login")
-    public ResponseEntity<String> login(@RequestBody LoginRequest loginRequest) {
-        String email = loginRequest.getEmail();
-        String pw = loginRequest.getPw();
-
-        boolean isAuthenticated = memberService.login(email, pw);
-
-
-        if (isAuthenticated) {
-            return ResponseEntity.ok("로그인 성공");
-        } else {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("아이디 또는 비밀번호 틀림");
-        }
-    }
+//    // 로그인 임시 코드
+//    @PostMapping("/login")
+//    public ResponseEntity<String> login(@RequestBody LoginRequest loginRequest) {
+//        String email = loginRequest.getEmail();
+//        String pw = loginRequest.getPw();
+//
+//        log.info("email ",email, " pw ",pw);
+//        boolean isAuthenticated = memberService.login(email, pw);
+//
+//
+//        if (isAuthenticated) {
+//            return ResponseEntity.ok("로그인 성공");
+//        } else {
+//            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("아이디 또는 비밀번호 틀림");
+//        }
+//    }
 }

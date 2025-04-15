@@ -35,11 +35,11 @@ public class ReviewServiceTests {
         for (int i=0; i<20; i++ ){
             ReviewDTO reviewDTO = ReviewDTO.builder()
                     .score(4)
-                    .title("진우후기"+6+i)
-                    .writer("jinwoo"+6+i)
+                    .title("영일후기"+i)
+                    .writer("youngil")
                     .content("이런저런후기").build();
 
-            Long result =reviewService.register(1L,1L,reviewDTO);
+            Long result =reviewService.register(3L,1L,reviewDTO);
         }
     }
 

@@ -14,9 +14,12 @@ import java.util.Map;
 
 public class CustomAccessDeniedHandler implements AccessDeniedHandler{
 
+  // 접근 제한(403 Forbidden) 발생 시 JSON 응답을 반환.
   @Override
-  public void handle(HttpServletRequest request, HttpServletResponse response,
-      AccessDeniedException accessDeniedException) throws IOException, ServletException {
+  public void handle(HttpServletRequest request,
+                     HttpServletResponse response,
+                      AccessDeniedException accessDeniedException)
+          throws IOException, ServletException {
 
     Gson gson = new Gson();
     
@@ -24,6 +27,7 @@ public class CustomAccessDeniedHandler implements AccessDeniedHandler{
 
     response.setContentType("application/json");
     response.setStatus(HttpStatus.FORBIDDEN.value());
+
     PrintWriter printWriter = response.getWriter();
     printWriter.println(jsonStr);
     printWriter.close();        
