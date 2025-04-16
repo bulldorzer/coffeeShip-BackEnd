@@ -4,7 +4,7 @@ package com.teamproject.coffeeShop.domain;
 public enum OrderStatus {
     PENDING,        // 주문대기
     ORDER,          // 주문
-    CANCEL,         // 주문
-    DELIVERY,       // 배송중
-    DELIVERY_OVER   // 배달완료
+    CANCEL,         // 주문취소
+    COMP,       // 배송중
+    COMPLETE        // 배달완료
 }
