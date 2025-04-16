@@ -201,15 +201,16 @@ public class OrderServiceImpl implements OrderService{
         for (Object[] result : results) {
             // Object[]에서 각각의 값을 추출
             Long orderId = (Long) result[0];  // 주문 아이디
-            LocalDate orderDate = (LocalDate) result[1];
-            String status = result[2].toString();
-            String coffeeName = (String) result[3];
-            int orderPrice = (int) result[4];
-            int qty = (int) result[5];
+            Long orderCoffeeBeanId = (Long) result[1];
+            LocalDate orderDate = (LocalDate) result[2];
+            String status = result[3].toString();
+            String coffeeName = (String) result[4];
+            int orderPrice = (int) result[5];
+            int qty = (int) result[6];
             int totalPrice = orderPrice * qty;
 
             // DTO 객체로 변환
-            OrderDetailsDTO orderDetailsDTO = new OrderDetailsDTO(orderId, orderDate, status, coffeeName, totalPrice, qty);
+            OrderDetailsDTO orderDetailsDTO = new OrderDetailsDTO(orderId, orderCoffeeBeanId, orderDate, status, coffeeName, totalPrice, qty);
             orderDetailsList.add(orderDetailsDTO);
         }
 
