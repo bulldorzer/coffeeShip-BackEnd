@@ -33,18 +33,28 @@ public class MemberSaveServiceImpl implements MemberSaveService{
     private final MemberSaveItemRepository memberSaveItemRepository;
     private final ModelMapper modelMapper;
 
+    // 관심목록 전체 조회
     @Override
-    public CustomPage<MemberSaveListDTO> getListMemberSave(Long id, Pageable pageable) {
-        Page<MemberSaveItem> memberSavePage = memberSaveItemRepository.findItemsByMemberId(id, pageable);
-        if(memberSavePage == null) {
+    public CustomPage<MemberSaveListDTO> getListMemberSave(Long memberId, Pageable pageable) {
+        Page<Object[]> result = memberSaveRepository.findSavedItemsWithImages(memberId, pageable);
+        if (result.isEmpty()) {
             throw new NoDataFoundException("조회된 데이터 없음");
         }
-        Page<MemberSaveListDTO> dtoPage = memberSavePage
-                .map(memberSave -> modelMapper.map(memberSave, MemberSaveListDTO.class));
+        // Object[]로 반환된 데이터를 DTO로 변환
+        Page<MemberSaveListDTO> dtoPage = result.map(object -> {
+            Long memberSaveId = (Long) object[0];
+            Long coffeeBeanId = (Long) object[1];
+            String name = (String) object[2];
+            int price = (int) object[3];
+            String imageFile = (String) object[4];
+
+            return new MemberSaveListDTO(memberSaveId, coffeeBeanId, name, price, imageFile);
+        });
         int groupSize = 10;
         return CustomPage.of(dtoPage, groupSize);
     }
 
+    // 관심상품 추가
     @Override
     public Long addCoffeeBeans(MemberSaveDTO memberSaveDTO) {
         Long memberSaveId = memberSaveDTO.getMemberSaveId();
@@ -65,11 +75,16 @@ public class MemberSaveServiceImpl implements MemberSaveService{
         return memberSaveId;
     }
 
+    // 관심상품 삭제
     @Override
-    public void deleteCoffeeBean(Long memberId, Long coffeeBeanId) {
-        memberSaveItemRepository.deleteByMemberSaveAndItemId(memberId, coffeeBeanId);
+    public void deleteCoffeeBean(Long memberId, List<Long> cfbIds) {
+        for (Long cfbId : cfbIds) {
+            // memberId와 cfbId로 해당 관심상품을 삭제
+            memberSaveItemRepository.deleteByMemberSaveAndItemId(memberId, cfbId);
+        }
     }
 
+    // 관심상품 목록 전체 삭제
     @Override
     public void deleteAllCoffeeBean(Long memberId) {
         memberSaveItemRepository.deleteAllByMemberSave(memberId);
@@ -89,5 +104,7 @@ public class MemberSaveServiceImpl implements MemberSaveService{
         }
         return memberSave;
     }
+
+
 
 }
