@@ -30,6 +30,10 @@ public class OrderDTO {
     private String street;
     private String zipcode;
 
+    public void setOrderId(Long orderId) {
+        this.orderId = orderId;
+    }
+
     // ✅ Setter 추가
     public void setCity(String city) {
         this.city = city;
