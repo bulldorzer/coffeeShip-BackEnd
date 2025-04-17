@@ -32,13 +32,22 @@ public class Order {
 
     // 주문상태 (Enum)
     @Enumerated(EnumType.STRING)
+    @Column(length = 20)
     private OrderStatus status;
 
     // 주문취소시 상태 변경
     public void cancel() {
-        if (delivery.getStatus() == DeliveryStatus.COMP) {
+        if (delivery.getStatus() == DeliveryStatus.COMPLETE) {
             throw new IllegalStateException("이미 배송 완료된 상품은 취소 불가");
         }
         this.status = OrderStatus.CANCEL;
+    }
+
+    // 배송완료시 상태 변경
+    public void complete() {
+        if (delivery.getStatus() == DeliveryStatus.COMP || delivery.getStatus() == DeliveryStatus.CANCEL ) {
+            throw new IllegalStateException("이미 배송 완료상품이거나 배송취소일 때 배송완료 불가");
+        }
+        this.status = OrderStatus.COMPLETE;
     }
 }

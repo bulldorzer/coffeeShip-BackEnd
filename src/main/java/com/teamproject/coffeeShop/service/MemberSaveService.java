@@ -11,7 +11,7 @@ public interface MemberSaveService {
     // 관심상품 추가
     Long addCoffeeBeans(MemberSaveDTO memberSaveDTO);
     // 관심상품 삭제
-    void deleteCoffeeBean(Long memberId, Long coffeeBeanId);
+    void deleteCoffeeBean(Long memberId, List<Long> cfbIds);
     // 관심상품 전체 삭제
     void deleteAllCoffeeBean(Long memberId);
 }

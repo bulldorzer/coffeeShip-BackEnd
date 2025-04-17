@@ -1,5 +1,6 @@
 package com.teamproject.coffeeShop.controller;
 
+import com.teamproject.coffeeShop.domain.Member;
 import com.teamproject.coffeeShop.dto.CustomPage;
 import com.teamproject.coffeeShop.dto.LoginRequest;
 import com.teamproject.coffeeShop.dto.MemberDTO;
@@ -11,7 +12,11 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Map;
+import java.util.Optional;
 
 // 회원Controller - 이재민
 @RestController
@@ -21,6 +26,8 @@ import org.springframework.web.bind.annotation.*;
 public class MemberController {
 
     private final MemberService memberService;
+    private final MemberRepository memberRepository;
+    private final PasswordEncoder passwordEncoder;
 
     // 전체 회원 조회
     @GetMapping("/list")
@@ -70,20 +77,22 @@ public class MemberController {
         return ResponseEntity.ok(memberService.getMemberByEmail(email));
     }
 
-//    // 로그인 임시 코드
-//    @PostMapping("/login")
-//    public ResponseEntity<String> login(@RequestBody LoginRequest loginRequest) {
-//        String email = loginRequest.getEmail();
-//        String pw = loginRequest.getPw();
-//
-//        log.info("email ",email, " pw ",pw);
-//        boolean isAuthenticated = memberService.login(email, pw);
-//
-//
-//        if (isAuthenticated) {
-//            return ResponseEntity.ok("로그인 성공");
-//        } else {
-//            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("아이디 또는 비밀번호 틀림");
-//        }
-//    }
+    // 회원탈퇴시 비밀번호 확인
+    @PostMapping("/{memberId}/verify-password")
+    public ResponseEntity<?> verifyPassword(
+            @PathVariable Long memberId,
+            @RequestBody Map<String, String> pw
+    ) {
+        String inputPw = pw.get("pw");
+        Optional<Member> optionalMember = memberRepository.findById(memberId);
+
+        if (optionalMember.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("회원을 찾을 수 없습니다.");
+        }
+
+        Member member = optionalMember.get();
+        boolean matched = passwordEncoder.matches(inputPw, member.getPw());
+
+        return ResponseEntity.ok(Map.of("verified", matched));
+    }
 }

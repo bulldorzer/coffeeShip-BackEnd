@@ -10,6 +10,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 // 관심상품Controller - 이재민
 @RestController
 @RequestMapping("/api/membersave")
@@ -36,9 +38,10 @@ public class MemberSaveController {
     }
 
     // 관심상품 삭제
-    @DeleteMapping("/{memberId}/{cfbId}")
-    public ResponseEntity<Void> deleteCoffeeBean(@PathVariable Long memberId, @PathVariable Long cfbId){
-        memberSaveService.deleteCoffeeBean(memberId, cfbId);
+    @DeleteMapping("/delete/{memberId}")
+    public ResponseEntity<Void> deleteMultipleCoffeeBeans(
+            @PathVariable Long memberId, @RequestBody List<Long> cfbIds) {
+        memberSaveService.deleteCoffeeBean(memberId, cfbIds);
         return ResponseEntity.noContent().build();
     }
 
