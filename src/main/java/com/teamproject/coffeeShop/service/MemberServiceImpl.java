@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -36,18 +37,23 @@ public class MemberServiceImpl implements MemberService {
     @Override
     public Long createMember(MemberDTO memberDTO){
         validateDuplicateMember(memberDTO);
+        List<String> roleNames = memberDTO.getRoleNames();
+        if (roleNames == null || roleNames.isEmpty()) {
+            roleNames = List.of("USER");
+        }
+        int point = 0;
         Member member = Member.builder()
                 .email(memberDTO.getEmail())
                 .pw(passwordEncoder.encode(memberDTO.getPw()))
                 .name(memberDTO.getName())
                 .phone(memberDTO.getPhone())
-                .point(memberDTO.getPoint())
+                .point(point)
                 .city(memberDTO.getCity())
                 .street(memberDTO.getStreet())
                 .zipcode(memberDTO.getZipcode())
                 .social(memberDTO.isSocial())
                 .memberShip(MemberShip.BRONZE)
-                .memberRoleList(memberDTO.getRoleNames().stream()
+                .memberRoleList(roleNames.stream()
                         .map(MemberRole::valueOf)
                         .collect(Collectors.toList())).build();
         memberRepository.save(member);
