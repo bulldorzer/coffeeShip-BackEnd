@@ -14,6 +14,7 @@ import java.time.LocalDate;
 @NoArgsConstructor
 public class OrderDetailsDTO {
     private Long orderId;
+    private Long coffeeBeanId;
     private LocalDate orderDate;
     private String status;
     private String coffeeName;

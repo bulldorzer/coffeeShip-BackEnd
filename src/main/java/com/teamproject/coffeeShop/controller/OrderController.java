@@ -2,15 +2,13 @@ package com.teamproject.coffeeShop.controller;
 
 import com.teamproject.coffeeShop.domain.Member;
 import com.teamproject.coffeeShop.domain.OrderCoffeeBean;
-import com.teamproject.coffeeShop.dto.CustomPage;
-import com.teamproject.coffeeShop.dto.DeliveryDTO;
-import com.teamproject.coffeeShop.dto.OrderDTO;
-import com.teamproject.coffeeShop.dto.OrderDetailsDTO;
+import com.teamproject.coffeeShop.dto.*;
 import com.teamproject.coffeeShop.service.OrderService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -48,6 +46,26 @@ public class OrderController {
         return ResponseEntity.ok(orderService.addOrderCoffeeBean(orderId, coffeeBeanId, qty));
     }
 
+    // 주문서 아이템 배달완료
+    @PutMapping("/{orderId}/complete")
+    public ResponseEntity<Map<String, Object>> updateOrderComplete(
+            @PathVariable Long orderId,
+            @RequestBody OrderDTO orderDTO) {
+
+        Map<String, Object> result = new HashMap<>();
+        try {
+            orderDTO.setOrderId(orderId);
+            orderService.updateOrderComplete(orderDTO);
+            result.put("message", "주문 상태 변경 성공");
+            result.put("orderId", orderId);
+            return ResponseEntity.ok(result);
+        } catch (IllegalArgumentException e) {
+            result.put("message", e.getMessage());
+            result.put("status", "error");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(result);
+        }
+    }
+
     // 특정 주문 아이템 취소
     @DeleteMapping("/coffeebean/{orderCoffeeBeanId}")
     public ResponseEntity<Map<String, Object>> removeOrderItem(@PathVariable Long orderCoffeeBeanId) {
@@ -65,15 +83,16 @@ public class OrderController {
         }
     }
 
+    // 마이페이지 주문목록 조회
     @GetMapping("/details/{memberId}")
     public List<OrderDetailsDTO> getOrderDetails(@PathVariable Long memberId) {
         return orderService.getOrderDetails(memberId);
     }
 
-//    // 전체 주문 취소
-//    @DeleteMapping("/{orderId}/items")
-//    public ResponseEntity<Void> cancelOrderItem(@PathVariable Long orderId) {
-//        orderService.cancelAllOrderItems(orderId);
-//        return ResponseEntity.noContent().build(); // 204 No Content
-//    }
+    // 전체 주문 취소
+    @DeleteMapping("/{orderId}/items")
+    public ResponseEntity<Void> cancelOrderItem(@PathVariable Long orderId) {
+        orderService.cancelAllOrderCoffeeBeans(orderId);
+        return ResponseEntity.noContent().build(); // 204 No Content
+    }
 }

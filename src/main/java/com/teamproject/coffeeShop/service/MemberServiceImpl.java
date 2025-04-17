@@ -93,9 +93,9 @@ public class MemberServiceImpl implements MemberService {
             validateDuplicateMember(memberDTO);
             searchMember.changeEmail(memberDTO.getEmail());
         }
-
+        String encodedPw = passwordEncoder.encode(memberDTO.getPw());
         searchMember.changeName(memberDTO.getName());
-        searchMember.changePw(memberDTO.getPw());
+        searchMember.changePw(encodedPw);
         searchMember.changePhone(memberDTO.getPhone());
         searchMember.changePoint(memberDTO.getPoint());
         searchMember.changeAddress(memberDTO.getCity(), memberDTO.getStreet(), memberDTO.getZipcode());

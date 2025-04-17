@@ -127,6 +127,32 @@ public class OrderServiceImpl implements OrderService{
         return CustomPage.of(dtoPage,groupSize);
     }
 
+    // 특정 주문서 완료 처리
+    @Override
+    public void updateOrderComplete(OrderDTO orderDTO) {
+
+        // 해당하는 주문서 찾기
+        Order order = orderRepository.findById(orderDTO.getOrderId())
+                .orElseThrow(()->new IllegalArgumentException("해당 주문서는 존재하지 않습니다."));
+
+        // 주문서상태 완료처리
+        order.setStatus(OrderStatus.COMPLETE);
+        log.info("order: ",order
+        );
+        // 수정
+        orderRepository.save(order);
+
+        // 배달아이디 추출
+        Long deliveryId = order.getDelivery().getId();
+        // 주문서에 해당하는 배달상태 찾기
+        Delivery delivery = deliveryRepository.findById(deliveryId).orElseThrow(()->new IllegalArgumentException("해당 주문서는 존재하지 않습니다."));
+
+        // 배달 완료처리
+        delivery.setStatus(DeliveryStatus.COMPLETE);
+
+        deliveryRepository.save(delivery);
+    }
+
     // 특정 주문서 삭제(취소)
     @Override
     public void cancelOrderCoffeeBean(Long orderCoffeeBeanId) {
@@ -166,6 +192,7 @@ public class OrderServiceImpl implements OrderService{
 
     }
 
+    // 마이페이지 주문목록 조회
     @Override
     public List<OrderDetailsDTO> getOrderDetails(Long memberId) {
         List<Object[]> results = orderRepository.findOrderDetailsByMember(memberId);
@@ -174,15 +201,16 @@ public class OrderServiceImpl implements OrderService{
         for (Object[] result : results) {
             // Object[]에서 각각의 값을 추출
             Long orderId = (Long) result[0];  // 주문 아이디
-            LocalDate orderDate = (LocalDate) result[1];
-            String status = result[2].toString();
-            String coffeeName = (String) result[3];
-            int orderPrice = (int) result[4];
-            int qty = (int) result[5];
+            Long orderCoffeeBeanId = (Long) result[1];
+            LocalDate orderDate = (LocalDate) result[2];
+            String status = result[3].toString();
+            String coffeeName = (String) result[4];
+            int orderPrice = (int) result[5];
+            int qty = (int) result[6];
             int totalPrice = orderPrice * qty;
 
             // DTO 객체로 변환
-            OrderDetailsDTO orderDetailsDTO = new OrderDetailsDTO(orderId, orderDate, status, coffeeName, totalPrice, qty);
+            OrderDetailsDTO orderDetailsDTO = new OrderDetailsDTO(orderId, orderCoffeeBeanId, orderDate, status, coffeeName, totalPrice, qty);
             orderDetailsList.add(orderDetailsDTO);
         }
 
