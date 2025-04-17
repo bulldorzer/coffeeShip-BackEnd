@@ -45,6 +45,14 @@ public class CoffeeBeanServiceImpl implements CoffeeBeanService{
             CoffeeBeanImage coffeeBeanImage = (arr[1] != null) ? (CoffeeBeanImage) arr[1] : null;
 
             CoffeeBeanDTO coffeeBeanDTO = modelMapper.map(coffeeBean, CoffeeBeanDTO.class);
+
+            // CoffeeBeanDTO의 CategoryId를 설정
+            List<Category> categories = categoryCoffeeBeanRepository.findCategoriesByCoffeeBeanId(coffeeBean.getId());
+            List<Long> categoryIds = categories.stream()
+                    .map(Category::getId)
+                    .collect(Collectors.toList());
+            coffeeBeanDTO.setCategoryIds(categoryIds);
+
             String imageFileName = (coffeeBeanImage != null) ? coffeeBeanImage.getFileName() : "default.png";
             coffeeBeanDTO.setUploadFileNames(List.of(imageFileName));
 
