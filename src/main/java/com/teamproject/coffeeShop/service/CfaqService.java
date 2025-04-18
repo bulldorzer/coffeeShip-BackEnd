@@ -16,6 +16,9 @@ public interface CfaqService {
     // 전체 상품문의 목록 조회(페이징 포함)
     public CustomPage<CfaqDTO> getAllCfaqs(Pageable pageable);
 
+    // 멤버가 작성한 상품 문의 후기 조회
+    CustomPage<CfaqDTO> getCaqByMemberId(Long memberId, Pageable pageable);
+
     // 상품문의글 수정
     public void modify(CfaqDTO cfaqDTO);
 
@@ -24,4 +27,6 @@ public interface CfaqService {
 
     // 상품문의 답변상태 변경
     public void responseAnswer(Long cfaqId);
+
+    
 }
