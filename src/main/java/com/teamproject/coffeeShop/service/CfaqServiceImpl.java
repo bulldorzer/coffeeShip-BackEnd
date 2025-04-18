@@ -101,6 +101,20 @@ public class CfaqServiceImpl implements CfaqService{
         return CustomPage.of(dtoPage,groupSize);
     }
 
+    // 멤버가 작성한 상품 문의 후기 조회
+    @Override
+    public CustomPage<CfaqDTO> getCaqByMemberId(Long memberId, Pageable pageable) {
+        Page<Cfaq> result = cfaqRepository.findByMemberId(memberId,pageable);
+
+        if (result.isEmpty()){
+            throw new IllegalArgumentException("조회된 데이터가 없습니다.");
+        }
+
+        Page<CfaqDTO> dtoPage = result.map( cfaq -> modelMapper.map(cfaq, CfaqDTO.class));
+        int groupSize = 10;
+        return CustomPage.of(dtoPage, groupSize);
+    }
+
     // 고객문의 글 수정
     @Override
     public void modify(CfaqDTO cfaqDTO) {

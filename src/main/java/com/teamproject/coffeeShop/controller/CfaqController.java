@@ -40,10 +40,20 @@ public class CfaqController {
 
     }
 
+
     // 고객문의 상세보기
     @GetMapping("/list/{cfaqId}")
     public ResponseEntity<CfaqDTO> get(@PathVariable(name = "cfaqId") Long cfaqId){
         return ResponseEntity.ok(cfaqService.getCfaq(cfaqId));
+    }
+
+    // 특정 멤버가 작성한 고객문의 리스트 조회
+    @GetMapping("/list/member/{memberId}")
+    public ResponseEntity<CustomPage<CfaqDTO>> getCaqByMember(
+            @PathVariable Long memberId,
+            @PageableDefault(size = 6) Pageable pageable){
+
+        return ResponseEntity.ok(cfaqService.getCaqByMemberId(memberId, pageable));
     }
 
     // 고객문의 전체목록보기 - 페이징처리
