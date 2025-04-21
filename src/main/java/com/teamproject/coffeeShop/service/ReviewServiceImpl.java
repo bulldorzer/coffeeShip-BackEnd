@@ -127,7 +127,16 @@ public class ReviewServiceImpl implements ReviewService{
             throw new IllegalArgumentException("조회된 데이터가 없습니다.");
         }
 
-        Page<ReviewDTO> dtoPage = result.map(review -> modelMapper.map(review, ReviewDTO.class));
+        Page<ReviewDTO> dtoPage = result.map(review -> ReviewDTO.builder()
+                .id(review.getId())
+                .score(review.getScore())
+                .productName(review.getCoffeeBean().getName())  // ← 요기!
+                .title(review.getTitle())
+                .writer(review.getWriter())
+                .content(review.getContent())
+                .postDate(review.getPostDate())
+                .build()
+        );
         int groupSize = 10;
         return CustomPage.of(dtoPage, groupSize);
     }

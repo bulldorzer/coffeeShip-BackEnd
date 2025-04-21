@@ -23,6 +23,9 @@ public class ReviewDTO {
     // 후기 점수
     private int score;
 
+    // 후기 상품명
+    private String productName;
+
     // 상품후기 제목
     private String title;
 
