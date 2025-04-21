@@ -1,7 +1,6 @@
 package com.teamproject.coffeeShop.controller;
 
 import com.google.gson.Gson;
-import com.teamproject.coffeeShop.dto.JwtResponse;
 import com.teamproject.coffeeShop.dto.LoginRequest;
 import com.teamproject.coffeeShop.dto.MemberDTO;
 import com.teamproject.coffeeShop.exception.CustomJWTException;

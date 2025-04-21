@@ -14,7 +14,7 @@ public class ReviewServiceTests {
     @Autowired
     ReviewService reviewService;
 
-    // 리뷰글 20개 등록
+    // 리뷰글 등록
     @Test
     public void 리뷰글추가(){
         ReviewDTO reviewDTO = ReviewDTO.builder()
@@ -39,7 +39,7 @@ public class ReviewServiceTests {
                     .writer("youngil")
                     .content("이런저런후기").build();
 
-            Long result =reviewService.register(3L,1L,reviewDTO);
+            Long result =reviewService.register(1L,1L,reviewDTO);
         }
     }
 

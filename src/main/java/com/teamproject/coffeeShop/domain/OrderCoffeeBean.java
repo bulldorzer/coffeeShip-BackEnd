@@ -49,8 +49,8 @@ public class OrderCoffeeBean {
         orderCoffeeBean.setCoffeeBean(coffeeBean); // 상품id (item_id)
         orderCoffeeBean.setOrderPrice(orderPrice); // 상품가격
         orderCoffeeBean.setQty(qty); // 주문수량
-        orderCoffeeBean.setName(coffeeBean.getName());
-        orderCoffeeBean.setOrderDate(order.getOrderDate());
+        orderCoffeeBean.setName(coffeeBean.getName()); // 원두상품이름
+        orderCoffeeBean.setOrderDate(order.getOrderDate()); // 주문서등록날짜
 
         coffeeBean.removeStock(qty); // 재고 감소
         return orderCoffeeBean;
