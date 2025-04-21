@@ -42,6 +42,14 @@ public class ReviewController {
         return ResponseEntity.ok(reviewService.getReview(reviewId));
     }
 
+    // 리뷰 전체목록 보기 - 페이징 처리
+    @GetMapping("/list")
+    public ResponseEntity<CustomPage<ReviewDTO>>
+    list(@PageableDefault(page = 0, size = 6)Pageable pageable) {
+
+        return ResponseEntity.ok(reviewService.getAllReviews(pageable));
+    }
+
     // 특정 상품에 대한 리뷰 보기
     @GetMapping("/list/product/{coffeeBeanId}")
     public ResponseEntity<CustomPage<ReviewDTO>> getReviewsByCoffeeBean(
@@ -58,14 +66,6 @@ public class ReviewController {
             @PageableDefault(size = 6) Pageable pageable) {
 
         return ResponseEntity.ok(reviewService.getReviewsByMemberId(memberId, pageable));
-    }
-
-    // 리뷰 전체목록 보기 - 페이징 처리
-    @GetMapping("/list")
-    public ResponseEntity<CustomPage<ReviewDTO>>
-    list(@PageableDefault(page = 0, size = 6)Pageable pageable) {
-
-        return ResponseEntity.ok(reviewService.getAllReviews(pageable));
     }
 
     // 리뷰 수정

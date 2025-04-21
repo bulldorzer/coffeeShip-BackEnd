@@ -47,6 +47,22 @@ public class PfaqController {
         return ResponseEntity.ok(pfaqService.getAllPfaqs(pageable));
     }
 
+    // 특정 상품에 대한 상품문의 보기 - 페이징처리
+    @GetMapping("/list/product/{coffeeBeanId}")
+    public ResponseEntity<CustomPage<PfaqDTO>> getPfaqByCoffeeBean(
+            @PathVariable Long coffeeBeanId,
+            @PageableDefault(page = 0, size = 6) Pageable pageable){
+        return ResponseEntity.ok(pfaqService.getPfaqByCoffeeBeanId(coffeeBeanId, pageable));
+    }
+
+    // 특정 멤버가 작성한 상품문의 목록보기 - 페이징처리
+    @GetMapping("/member/{memberId}")
+    public ResponseEntity<CustomPage<PfaqDTO>> getPfaqByMember(
+            @PathVariable Long memberId,
+            @PageableDefault(size = 6) Pageable pageable){
+        return ResponseEntity.ok(pfaqService.getPfaqByMemberId(memberId, pageable));
+    }
+
 
     // 상품문의 수정
     @PutMapping("/{pfaqId}")

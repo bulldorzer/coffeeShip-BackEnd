@@ -1,11 +1,9 @@
 package com.teamproject.coffeeShop.service;
 
-import com.teamproject.coffeeShop.domain.Answer;
-import com.teamproject.coffeeShop.domain.CoffeeBean;
-import com.teamproject.coffeeShop.domain.Member;
-import com.teamproject.coffeeShop.domain.Pfaq;
+import com.teamproject.coffeeShop.domain.*;
 import com.teamproject.coffeeShop.dto.CustomPage;
 import com.teamproject.coffeeShop.dto.PfaqDTO;
+import com.teamproject.coffeeShop.dto.ReviewDTO;
 import com.teamproject.coffeeShop.repository.CoffeeBeanRepository;
 import com.teamproject.coffeeShop.repository.MemberRepository;
 import com.teamproject.coffeeShop.repository.PfaqRepository;
@@ -106,6 +104,46 @@ public class PfaqServiceImpl implements PfaqService{
         // DTO 페이지 네이션 정보 추가 별도의 DTO 만들기
         int groupSize = 10;
         return CustomPage.of(dtoPage,groupSize);
+    }
+
+    // 특정 상품에 대한 상품문의 보기
+    @Override
+    public CustomPage<PfaqDTO> getPfaqByCoffeeBeanId(Long coffeeBeanId, Pageable pageable) {
+        Page<Pfaq> result = pfaqRepository.findByCoffeeBean_Id(coffeeBeanId, pageable);
+
+        // 조회된 페이지 없으면 예외처리
+        if (result.isEmpty()) throw new IllegalArgumentException("조회된 데이터가 존재하지 않습니다.");
+
+        // 엔티티 -> DTO 변환
+        Page<PfaqDTO> dtoPage = result.map(pfaq -> modelMapper.map(pfaq,PfaqDTO.class));
+        log.info("=======<ReviewDTO Page>=======");
+        log.info(dtoPage.getContent());
+
+        // DTO 페이지 네이션 정보 추가( 별도의 DTO 만들기)
+        int groupSize = 10;
+        return CustomPage.of(dtoPage,groupSize);
+    }
+
+    // 특정 멤버가 작성한 상품문의 목록보기
+    @Override
+    public CustomPage<PfaqDTO> getPfaqByMemberId(Long memberId, Pageable pageable) {
+        Page<Pfaq> result = pfaqRepository.findByMemberId(memberId, pageable);
+
+        if (result.isEmpty()) {
+            throw new IllegalArgumentException("조회된 데이터가 없습니다.");
+        }
+
+        Page<PfaqDTO> dtoPage = result.map(pfaq -> PfaqDTO.builder()
+                .id(pfaq.getId())
+                .productName(pfaq.getCoffeeBean().getName())  // ← 요기!
+                .title(pfaq.getTitle())
+                .writer(pfaq.getWriter())
+                .content(pfaq.getContent())
+                .postDate(pfaq.getPostDate())
+                .build()
+        );
+        int groupSize = 10;
+        return CustomPage.of(dtoPage, groupSize);
     }
 
     // 상품문의 글 수정

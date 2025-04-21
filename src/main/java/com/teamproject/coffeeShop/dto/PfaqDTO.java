@@ -19,6 +19,9 @@ public class PfaqDTO {
     // 상품문의 게시판 아이디
     private Long id;
 
+    // 후기 상품명
+    private String productName;
+
     // 상품문의 제목
     private String title;
 
