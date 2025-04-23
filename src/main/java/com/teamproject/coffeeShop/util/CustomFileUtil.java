@@ -92,7 +92,7 @@ public class CustomFileUtil {
 
         if(!resource.exists()) {
 
-            resource = new FileSystemResource(uploadPath+ File.separator + "default.jpeg");
+            resource = new FileSystemResource(uploadPath+ File.separator + "default.png");
 
         }
 
@@ -103,6 +103,7 @@ public class CustomFileUtil {
         } catch(Exception e){
             return ResponseEntity.internalServerError().build();
         }
+        log.info("▶▶▶ Trying to load image: {}", uploadPath + File.separator + fileName);
         return ResponseEntity.ok().headers(headers).body(resource);
     }
 

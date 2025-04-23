@@ -53,6 +53,7 @@ public class CoffeeBeanServiceImpl implements CoffeeBeanService{
                     .collect(Collectors.toList());
             coffeeBeanDTO.setCategoryIds(categoryIds);
 
+            // CoffeeBeanDTO의 uploadFileNames를 설정
             String imageFileName = (coffeeBeanImage != null) ? coffeeBeanImage.getFileName() : "default.png";
             coffeeBeanDTO.setUploadFileNames(List.of(imageFileName));
 
@@ -65,7 +66,24 @@ public class CoffeeBeanServiceImpl implements CoffeeBeanService{
     public CoffeeBeanDTO getCoffeeBeanById(Long id) {
         CoffeeBean coffeeBean = coffeeBeanRepository.selectOne(id)
                 .orElseThrow(() -> new RuntimeException("존재하지 않는 원두입니다."));
-        return modelMapper.map(coffeeBean, CoffeeBeanDTO.class);
+        CoffeeBeanDTO coffeeBeanDTO = modelMapper.map(coffeeBean, CoffeeBeanDTO.class);
+
+        // CoffeeBeanDTO의 CategoryId를 설정
+        List<Category> categories = categoryCoffeeBeanRepository.findCategoriesByCoffeeBeanId(coffeeBean.getId());
+        List<Long> categoryIds = categories.stream()
+                .map(Category::getId)
+                .collect(Collectors.toList());
+        coffeeBeanDTO.setCategoryIds(categoryIds);
+
+        // CoffeeBeanDTO의 uploadFileNames를 설정
+        List<CoffeeBeanImage> coffeeBeanImageList = coffeeBean.getImageList();
+        List<String> imageFileNames = (coffeeBeanImageList != null && !coffeeBeanImageList.isEmpty())
+                ? coffeeBeanImageList.stream()
+                .map(CoffeeBeanImage::getFileName)
+                .collect(Collectors.toList())
+                : List.of("default.png");
+        coffeeBeanDTO.setUploadFileNames(imageFileNames);
+        return coffeeBeanDTO;
     }
 
     @Override
