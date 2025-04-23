@@ -29,13 +29,20 @@ public class CoffeeBeanController {
     private final CustomFileUtil fileUtil;
     private final CoffeeBeanService coffeeBeanService;
 
+    // 전체 상품 조회 (페이징 제외)
+    @GetMapping("/listAll")
+    public ResponseEntity<List<CoffeeBeanDTO>> getAllCoffeeBeans() {
+        List<CoffeeBeanDTO> list = coffeeBeanService.getAllCoffeeBeans();
+        return ResponseEntity.ok(list);
+    }
+
     // 전체 상품 조회 (페이징 지원)
     @GetMapping("/list")
-    public Page<CoffeeBeanDTO> getAllCoffeeBeans(
+    public Page<CoffeeBeanDTO> getAllCoffeeBeansPaged(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size) {
         Pageable pageable = PageRequest.of(page, size);
-        return coffeeBeanService.getAllCoffeeBeans(pageable);
+        return coffeeBeanService.getAllCoffeeBeansPaged(pageable);
     }
 
     // 단일 상품 조회

@@ -11,8 +11,11 @@ public interface CoffeeBeanService {
     // 전체 원두 수 반환
     int getAllCoffeeBeansSize();
 
+    // 전체 원두 목록 조회(페이징 제외)
+    List<CoffeeBeanDTO> getAllCoffeeBeans();
+
     // 전체 원두 목록 조회(페이징 포함)
-    Page<CoffeeBeanDTO> getAllCoffeeBeans(Pageable pageable);
+    Page<CoffeeBeanDTO> getAllCoffeeBeansPaged(Pageable pageable);
 
     // 고유번호로 원두 가져오기
     CoffeeBeanDTO getCoffeeBeanById(Long id);

@@ -28,6 +28,9 @@ public interface CoffeeBeanRepository extends JpaRepository<CoffeeBean, Long>{
     @Query("SELECT cb, cbi FROM CoffeeBean cb LEFT JOIN cb.imageList cbi ON cbi.ord = 0 WHERE cb.delFlag = false")
     Page<Object[]> selectList(Pageable pageable);
 
+    @Query("SELECT cb, cbi FROM CoffeeBean cb LEFT JOIN cb.imageList cbi ON cbi.ord = 0 WHERE cb.delFlag = false")
+    List<Object[]> selectAll();
+
     // 고유번호가 맞는 원두의 delFlag 수정
     @Transactional
     @Modifying

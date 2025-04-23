@@ -35,9 +35,36 @@ public class CoffeeBeanServiceImpl implements CoffeeBeanService{
         return coffeeBeanRepository.findAll().size();
     }
 
+
+    @Override
+    // 전체 원두 목록 조회 (페이징 제외)
+    public List<CoffeeBeanDTO> getAllCoffeeBeans() {
+        List<Object[]> result = coffeeBeanRepository.selectAll();
+
+        return result.stream().map(arr -> {
+            CoffeeBean coffeeBean = (CoffeeBean) arr[0];
+            CoffeeBeanImage coffeeBeanImage = (arr[1] != null) ? (CoffeeBeanImage) arr[1] : null;
+
+            CoffeeBeanDTO coffeeBeanDTO = modelMapper.map(coffeeBean, CoffeeBeanDTO.class);
+
+            // CoffeeBeanDTO의 CategoryId를 설정
+            List<Category> categories = categoryCoffeeBeanRepository.findCategoriesByCoffeeBeanId(coffeeBean.getId());
+            List<Long> categoryIds = categories.stream()
+                    .map(Category::getId)
+                    .collect(Collectors.toList());
+            coffeeBeanDTO.setCategoryIds(categoryIds);
+
+            // CoffeeBeanDTO의 uploadFileNames를 설정
+            String imageFileName = (coffeeBeanImage != null) ? coffeeBeanImage.getFileName() : "default.png";
+            coffeeBeanDTO.setUploadFileNames(List.of(imageFileName));
+
+            return coffeeBeanDTO;
+        }).collect(Collectors.toList());
+    }
+
     @Override
     // 전체 원두 목록 조회 (페이징 포함)
-    public Page<CoffeeBeanDTO> getAllCoffeeBeans(Pageable pageable) {
+    public Page<CoffeeBeanDTO> getAllCoffeeBeansPaged(Pageable pageable) {
         Page<Object[]> result = coffeeBeanRepository.selectList(pageable);
 
         return result.map(arr -> {
