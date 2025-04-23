@@ -42,8 +42,9 @@ public class OrderController {
     public ResponseEntity<OrderCoffeeBean> addOrderItem(
             @PathVariable Long orderId,
             @RequestParam Long coffeeBeanId,
-            @RequestParam int qty) {
-        return ResponseEntity.ok(orderService.addOrderCoffeeBean(orderId, coffeeBeanId, qty));
+            @RequestParam int qty,
+            @RequestBody DeliveryDTO deliveryDTO) {
+        return ResponseEntity.ok(orderService.addOrderCoffeeBean(orderId, coffeeBeanId, qty, deliveryDTO));
     }
 
     // 주문서 아이템 배달완료

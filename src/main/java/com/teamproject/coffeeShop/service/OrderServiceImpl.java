@@ -37,13 +37,13 @@ public class OrderServiceImpl implements OrderService{
 
     private final DeliveryService deliveryService;
     private final ModelMapper modelMapper;
-    
+
     // 주문서 생성 (아이템 추가 X)
     @Override
     public Long createOrder(Long memberId, DeliveryDTO deliveryDTO) {
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(()-> new IllegalArgumentException("해당 회원이 존재하지 않습니다."));
-        
+
         // 배달 주소,상태 초기화
 //        Delivery delivery = new Delivery();
 //        delivery.setShipper(deliveryDTO.getShipper());
@@ -59,22 +59,24 @@ public class OrderServiceImpl implements OrderService{
         Delivery delivery = result.orElseThrow();
 
 
-        
+
         // 주문서 상태 초기화
         Order order = new Order();
         order.setMember(member);
         order.setDelivery(delivery);
         order.setOrderDate(LocalDate.now());
         order.setStatus(OrderStatus.ORDER);
-        
+
         // Orders테이블에 저장 후 아이디 반환
         orderRepository.save(order);
         return order.getId();
     }
 
+
+
     // 주문서에 상품 추가
     @Override
-    public OrderCoffeeBean addOrderCoffeeBean(Long orderId, Long coffeeBeanId, int qty) {
+    public OrderCoffeeBean addOrderCoffeeBean(Long orderId, Long coffeeBeanId, int qty, DeliveryDTO deliveryDTO) {
 
         try {
             // 해당 주문서 검색
@@ -86,11 +88,16 @@ public class OrderServiceImpl implements OrderService{
                     .orElseThrow(()->new IllegalArgumentException("해당상품은 존재하지 않습니다."));
 
             // 수량 정책오류 처리
-            if (qty<0) throw new IllegalArgumentException("수량은 1 이상이여야 합니다.");
+            if (qty<=0) throw new IllegalArgumentException("수량은 1 이상이여야 합니다.");
 
             // 주문 상품 생성
             OrderCoffeeBean orderCoffeeBean =
                     OrderCoffeeBean.createOrderItem(order, coffeeBean, coffeeBean.getPrice(),qty);
+
+            // 주문서에 마지막 배송정보 변경
+            Long deliveryId = order.getDelivery().getId();
+            System.out.println("deliveryId = " + deliveryId);
+            deliveryService.updateDelivery(deliveryId,deliveryDTO);
 
             // DB에 저장
             return orderCoffeeBeanRepository.save(orderCoffeeBean);
