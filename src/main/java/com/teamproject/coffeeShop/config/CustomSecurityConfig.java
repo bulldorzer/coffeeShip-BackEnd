@@ -69,7 +69,7 @@ public class CustomSecurityConfig {
             .httpBasic(httpBasic -> httpBasic.disable())
             // 기본 폼 로그인 비활성화
             .formLogin(form -> form.disable())
-            // 6 - 권한 예외 처리(접근 거부 예외핸들러 설정)
+            // 6 - 권한 예외 처리(접근 거부 예외핸들러 설정) - 인증은 되었는데 권한이 부족한 경우
             .exceptionHandling(exception -> exception.accessDeniedHandler(new CustomAccessDeniedHandler()));
 
     return http.build();
