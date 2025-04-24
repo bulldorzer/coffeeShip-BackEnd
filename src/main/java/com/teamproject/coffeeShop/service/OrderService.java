@@ -13,7 +13,7 @@ import java.util.List;
 public interface OrderService {
     public Long createOrder(Long memberId, DeliveryDTO deliveryDTO);
 
-    public OrderCoffeeBean addOrderCoffeeBean(Long orderId, Long coffeeBeanId, int qty, int usepoint, DeliveryDTO deliveryDTO);
+    public OrderCoffeeBean addOrderCoffeeBean(Long orderId, Long coffeeBeanId, int qty, int addpoint, int usepoint, DeliveryDTO deliveryDTO);
 
     public List<OrderDTO> getAllOrders();
 
