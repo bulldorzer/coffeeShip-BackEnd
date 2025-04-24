@@ -77,7 +77,7 @@ public class OrderServiceImpl implements OrderService{
 
     // 주문서에 상품 추가
     @Override
-    public OrderCoffeeBean addOrderCoffeeBean(Long orderId, Long coffeeBeanId, int qty, int usepoint, DeliveryDTO deliveryDTO) {
+    public OrderCoffeeBean addOrderCoffeeBean(Long orderId, Long coffeeBeanId, int qty, int addpoint, int usepoint, DeliveryDTO deliveryDTO) {
 
         try {
             // 해당 주문서 검색
@@ -100,15 +100,23 @@ public class OrderServiceImpl implements OrderService{
             System.out.println("deliveryId = " + deliveryId);
             deliveryService.updateDelivery(deliveryId,deliveryDTO);
 
-            // 결제에 사용한 포인트 차감
+            // 결제시 보유포인트에 적립포인트를 합산
             Member member = order.getMember();
             int havepoint = order.getMember().getPoint();
-            System.out.println("havepoint = " + havepoint);
-            System.out.println("usepoint = " + usepoint);
-            if (havepoint-usepoint<0) throw new IllegalArgumentException("포인트가 부족합니다.");
-            else member.changePoint(havepoint-usepoint);
+            System.out.println("member.addpoint = "+ addpoint + " / member.usepoint = "+ usepoint);
+
+            // 포인트 계산
+            int updatedPoint = havepoint + addpoint - usepoint;
+            if (updatedPoint < 0) {
+                throw new IllegalArgumentException("포인트가 부족합니다.");
+            }
+
+            // 포인트 업데이트
+            member.changePoint(updatedPoint);
+            System.out.println("member.getPoint = "+member.getPoint());
+
+            // member테이블에 저장
             memberRepository.save(member);
-            System.out.println("member의 차감된 포인트 = " + member.getPoint());
 
             // DB에 저장
             return orderCoffeeBeanRepository.save(orderCoffeeBean);
