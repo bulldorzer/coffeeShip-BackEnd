@@ -20,13 +20,13 @@ public class CategoryController {
 
     private final CategoryService categoryService;
 
-    // 부모 카테고리 조회 (자식 카테고리 제외 : CategoryDTO(category, false))
+    // 부모 카테고리 조회 (자식 카테고리 포함 : CategoryDTO(category, true))
     // 양방향 관계로 인하여 재귀적인 관계(부모-자식 트리 구조)인 경우 -> 그대로 반환하면 StackOverflowError가 발생할 수 있음.
     // -> 수동으로 변환 (ModelMapper 사용 X)
     @GetMapping("/parents")
     public ResponseEntity<List<CategoryDTO>> getParentCategories(){
         List<CategoryDTO> categories = categoryService.getParentCategories()
-                .stream().map(category -> new CategoryDTO(category, false))
+                .stream().map(category -> new CategoryDTO(category, true))
                 .collect(Collectors.toList());
         return ResponseEntity.ok(categories);
     }
