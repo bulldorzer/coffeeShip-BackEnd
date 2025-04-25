@@ -28,6 +28,7 @@ public class ReviewServiceImpl implements ReviewService{
     private final MemberRepository memberRepository;
     private final CoffeeBeanRepository coffeeBeanRepository;
 
+
     // 리뷰 등록
     @Override
     public Long register(Long memberId, Long coffeeBeanId, ReviewDTO reviewDTO) {

@@ -239,10 +239,11 @@ public class OrderServiceImpl implements OrderService{
             String coffeeName = (String) result[4];
             int orderPrice = (int) result[5];
             int qty = (int) result[6];
+            boolean hasReview = (boolean) result[7];
             int totalPrice = orderPrice * qty;
 
             // DTO 객체로 변환
-            OrderDetailsDTO orderDetailsDTO = new OrderDetailsDTO(orderId, orderCoffeeBeanId, orderDate, status, coffeeName, totalPrice, qty);
+            OrderDetailsDTO orderDetailsDTO = new OrderDetailsDTO(orderId, orderCoffeeBeanId, orderDate, status, coffeeName, totalPrice, qty, hasReview);
             orderDetailsList.add(orderDetailsDTO);
         }
 

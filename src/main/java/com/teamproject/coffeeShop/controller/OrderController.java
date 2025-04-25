@@ -50,7 +50,7 @@ public class OrderController {
     }
 
     // 주문서 아이템 배달완료
-    @PutMapping("/{orderId}/complete")
+    @PutMapping("/complete/{orderId}")
     public ResponseEntity<Map<String, Object>> updateOrderComplete(
             @PathVariable Long orderId,
             @RequestBody OrderDTO orderDTO) {

@@ -40,6 +40,9 @@ public class OrderCoffeeBean {
     // 주문수량
     private int qty;
 
+    // 리뷰 보유 여부 true : 리뷰 보유, false : 리뷰 미보유
+    private boolean hasReview;
+
     // 주문상품 생성
     public static OrderCoffeeBean createOrderItem(Order order, CoffeeBean coffeeBean, int orderPrice, int qty){
 
@@ -64,6 +67,11 @@ public class OrderCoffeeBean {
     // 주문상품 금액 계산 - 상품당 단가 * 수량
     public int getTotalPrice(){
         return getOrderPrice() * getQty();
+    }
+
+    // 리뷰 보유 여부 변경
+    public void changeHasReview(boolean hasReview) {
+        this.hasReview = hasReview;
     }
 
 

@@ -20,5 +20,6 @@ public class OrderDetailsDTO {
     private String coffeeName; // 주문 원두 상품명
     private int totalPrice; // 총 주문 가격
     private int qty; // 총 주문 수량
+    private boolean hasReview = false; // 리뷰 보유 여부
 
 }
