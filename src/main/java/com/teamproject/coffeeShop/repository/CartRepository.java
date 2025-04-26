@@ -10,7 +10,7 @@ import java.util.Optional;
 /* 장바구니 Repository - 나영일 */
 public interface CartRepository extends JpaRepository<Cart, Long> {
 
-    // 이메일로 회원의 장바구니 가져오기 (Member 가져온 뒤에 주석 해제)
-    @Query("select c from Cart c where c.member.email= :email")
-    public Optional<Cart> getCartOfMember(@Param("email") String email);
+    // 이메일로 회원 장바구니Id 가져오는 기능
+    @Query("SELECT c.id FROM Cart c WHERE c.member.email = :email")
+    public Optional<Long> getCartIdByEmail(@Param("email") String email);
 }

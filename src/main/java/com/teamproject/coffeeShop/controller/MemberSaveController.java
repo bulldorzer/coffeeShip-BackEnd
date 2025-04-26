@@ -38,10 +38,10 @@ public class MemberSaveController {
     }
 
     // 관심상품 삭제
-    @DeleteMapping("/delete/{memberId}")
+    @DeleteMapping("/delete/{memberSaveId}")
     public ResponseEntity<Void> deleteMultipleCoffeeBeans(
-            @PathVariable Long memberId, @RequestBody List<Long> cfbIds) {
-        memberSaveService.deleteCoffeeBean(memberId, cfbIds);
+            @PathVariable Long memberSaveId, @RequestBody List<Long> cfbIds) {
+        memberSaveService.deleteCoffeeBean(memberSaveId, cfbIds);
         return ResponseEntity.noContent().build();
     }
 

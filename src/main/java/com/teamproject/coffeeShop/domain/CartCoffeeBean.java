@@ -26,8 +26,15 @@ public class CartCoffeeBean {
     @Column(name = "qty")         // 중복 컬럼 생성 방지
     private int qty;              // 원두 수량
 
+    private boolean grindFlag;
+
+    // 수량 변경
     public void changeQty(int qty){
         this.qty = qty;
     }
 
+    // 분쇄 여부 변경
+    public void changeGrindFlag (boolean grindFlag) {
+        this.grindFlag = grindFlag;
+    }
 }

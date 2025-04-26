@@ -18,6 +18,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -76,11 +77,12 @@ public class MemberSaveServiceImpl implements MemberSaveService{
     }
 
     // 관심상품 삭제
+    @Transactional
     @Override
-    public void deleteCoffeeBean(Long memberId, List<Long> cfbIds) {
+    public void deleteCoffeeBean(Long memberSaveId, List<Long> cfbIds) {
         for (Long cfbId : cfbIds) {
             // memberId와 cfbId로 해당 관심상품을 삭제
-            memberSaveItemRepository.deleteByMemberSaveAndItemId(memberId, cfbId);
+            memberSaveItemRepository.deleteByMemberSaveAndItemId(memberSaveId, cfbId);
         }
     }
 

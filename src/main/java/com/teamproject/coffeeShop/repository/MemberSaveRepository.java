@@ -24,6 +24,7 @@ public interface MemberSaveRepository extends JpaRepository<MemberSave, Long> {
             "JOIN msi.memberSave ms " +
             "JOIN msi.coffeeBean cb " +
             "JOIN cb.imageList ci " +
-            "WHERE ms.id = :memberId")
+            "WHERE ms.member.id = :memberId")
     Page<Object[]> findSavedItemsWithImages(@Param("memberId") Long memberId, Pageable pageable);
+
 }
