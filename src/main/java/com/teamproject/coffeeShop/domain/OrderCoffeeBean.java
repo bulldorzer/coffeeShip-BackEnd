@@ -66,6 +66,4 @@ public class OrderCoffeeBean {
         return getOrderPrice() * getQty();
     }
 
-
-
 }
