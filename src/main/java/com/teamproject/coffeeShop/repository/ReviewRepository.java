@@ -14,4 +14,7 @@ public interface ReviewRepository extends JpaRepository<Review,Long> {
     // 특정 멤버가 작성한 리뷰 리스트 조회
     Page<Review> findByMemberId(Long memberId, Pageable pageable);
 
+    // 특정 상품에 대한 리뷰가 존재하는지 확인
+    boolean existsByMemberIdAndCoffeeBeanId(Long memberId, Long coffeeBeanId);
+
 }

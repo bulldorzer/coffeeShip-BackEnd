@@ -34,6 +34,11 @@ public class ReviewServiceImpl implements ReviewService{
     public Long register(Long memberId, Long coffeeBeanId, ReviewDTO reviewDTO) {
         log.info("Review Board register");
 
+        // 리뷰 중복 검사
+        if (reviewRepository.existsByMemberIdAndCoffeeBeanId(memberId, coffeeBeanId)) {
+            throw new IllegalStateException("이미 해당 상품에 대한 리뷰가 존재합니다.");
+        }
+
         // 멤버아이디, 아이템아이디를 받아 멤버,아이템 엔티티 가져옴
         Member member  = memberRepository.findById(memberId).orElseThrow(
                 ()->new IllegalArgumentException("해당 회원은 존재하지 않습니다.")
