@@ -1,6 +1,7 @@
 package com.teamproject.coffeeShop.dto;
 
 import com.teamproject.coffeeShop.domain.OrderStatus;
+import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -9,7 +10,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 /* 주문서DTO - 진우 */
-@Getter
+@Data
 @NoArgsConstructor
 public class OrderDTO {
 
@@ -25,27 +26,16 @@ public class OrderDTO {
     // 주문서 상태
     private OrderStatus status;
 
+    // 커피 원두 상품 DTO
+    private  OrderItemRequestDTO orderItemRequestDTO;
+
+    // 배달DTO
+    private DeliveryDTO deliveryDTO;
+
     // 도로명주소
     private String city;
     private String street;
     private String zipcode;
-
-    public void setOrderId(Long orderId) {
-        this.orderId = orderId;
-    }
-
-    // ✅ Setter 추가
-    public void setCity(String city) {
-        this.city = city;
-    }
-
-    public void setStreet(String street) {
-        this.street = street;
-    }
-
-    public void setZipcode(String zipcode) {
-        this.zipcode = zipcode;
-    }
 
     // DTO 초기화 생성자
     public OrderDTO(

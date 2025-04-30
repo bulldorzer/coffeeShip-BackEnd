@@ -39,14 +39,12 @@ public class OrderController {
 
     // 주문서에 아이템 추가
     @PostMapping("/{orderId}/coffeeBean")
-    public ResponseEntity<OrderCoffeeBean> addOrderItem(
+    public ResponseEntity<List<OrderCoffeeBean>> addOrderItem(
             @PathVariable Long orderId,
-            @RequestParam Long coffeeBeanId,
-            @RequestParam int qty,
             @RequestParam int addpoint,
             @RequestParam int usepoint,
-            @RequestBody DeliveryDTO deliveryDTO) {
-        return ResponseEntity.ok(orderService.addOrderCoffeeBean(orderId, coffeeBeanId, qty, addpoint, usepoint, deliveryDTO));
+            @RequestBody List<OrderDTO> orderItems) {
+        return ResponseEntity.ok(orderService.addOrderCoffeeBean(orderId, orderItems, addpoint, usepoint));
     }
 
     // 주문서 아이템 배달완료

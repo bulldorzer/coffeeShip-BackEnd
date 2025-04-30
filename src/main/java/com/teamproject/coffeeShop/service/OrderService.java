@@ -1,10 +1,7 @@
 package com.teamproject.coffeeShop.service;
 
 import com.teamproject.coffeeShop.domain.OrderCoffeeBean;
-import com.teamproject.coffeeShop.dto.CustomPage;
-import com.teamproject.coffeeShop.dto.DeliveryDTO;
-import com.teamproject.coffeeShop.dto.OrderDTO;
-import com.teamproject.coffeeShop.dto.OrderDetailsDTO;
+import com.teamproject.coffeeShop.dto.*;
 import org.springframework.data.domain.Pageable;
 
 import java.util.List;
@@ -13,7 +10,7 @@ import java.util.List;
 public interface OrderService {
     public Long createOrder(Long memberId, DeliveryDTO deliveryDTO);
 
-    public OrderCoffeeBean addOrderCoffeeBean(Long orderId, Long coffeeBeanId, int qty, int addpoint, int usepoint, DeliveryDTO deliveryDTO);
+    public List<OrderCoffeeBean> addOrderCoffeeBean(Long orderId, List<OrderDTO> orderItems , int addpoint, int usepoint);
 
     public List<OrderDTO> getAllOrders();
 
