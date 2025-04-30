@@ -1,10 +1,7 @@
 package com.teamproject.coffeeShop.service;
 
 import com.teamproject.coffeeShop.domain.*;
-import com.teamproject.coffeeShop.dto.CustomPage;
-import com.teamproject.coffeeShop.dto.DeliveryDTO;
-import com.teamproject.coffeeShop.dto.OrderDTO;
-import com.teamproject.coffeeShop.dto.OrderDetailsDTO;
+import com.teamproject.coffeeShop.dto.*;
 import com.teamproject.coffeeShop.repository.*;
 import com.teamproject.coffeeShop.exception.NoDataFoundException;
 import lombok.RequiredArgsConstructor;
@@ -77,28 +74,37 @@ public class OrderServiceImpl implements OrderService{
 
     // 주문서에 상품 추가
     @Override
-    public OrderCoffeeBean addOrderCoffeeBean(Long orderId, Long coffeeBeanId, int qty, int addpoint, int usepoint, DeliveryDTO deliveryDTO) {
+    public List<OrderCoffeeBean> addOrderCoffeeBean(Long orderId, List<OrderDTO> orderItems, int addpoint, int usepoint) {
 
         try {
             // 해당 주문서 검색
             Order order = orderRepository.findById(orderId)
                     .orElseThrow(()->new IllegalArgumentException("해당 주문서는 존재하지 않습니다."));
 
-            // 추가할 상품 검색
-            CoffeeBean coffeeBean = coffeeBeanRepository.findById(coffeeBeanId)
-                    .orElseThrow(()->new IllegalArgumentException("해당상품은 존재하지 않습니다."));
 
-            // 수량 정책오류 처리
-            if (qty<=0) throw new IllegalArgumentException("수량은 1 이상이여야 합니다.");
+            List<OrderCoffeeBean> orderCoffeeBeans = new ArrayList<>();
+
+
+            for (OrderDTO item : orderItems) {
+
+            // 추가할 상품 검색
+            CoffeeBean coffeeBean = coffeeBeanRepository.findById(item.getOrderItemRequestDTO().getCoffeeBeanId()).orElseThrow(()->new IllegalArgumentException("해당 원두가 존재하지 않습니다."));
 
             // 주문 상품 생성
-            OrderCoffeeBean orderCoffeeBean =
-                    OrderCoffeeBean.createOrderItem(order, coffeeBean, coffeeBean.getPrice(),qty);
+            OrderCoffeeBean orderCoffeeBean = OrderCoffeeBean.createOrderItem(order, coffeeBean, coffeeBean.getPrice(), item.getOrderItemRequestDTO().getQty());
 
+            // 주문서와 원두 연결
+            System.out.println("orderCoffeeBean = " + orderCoffeeBean);
+            orderCoffeeBeans.add(orderCoffeeBean);
+            }
             // 주문서에 마지막 배송정보 변경
-            Long deliveryId = order.getDelivery().getId();
-            System.out.println("deliveryId = " + deliveryId);
-            deliveryService.updateDelivery(deliveryId,deliveryDTO);
+            if (!orderItems.isEmpty()){
+                DeliveryDTO deliveryDTO = orderItems.get(0).getDeliveryDTO();
+                System.out.println("deliveryDTO = " + deliveryDTO);
+                Long deliveryId = order.getDelivery().getId();
+                System.out.println("deliveryId = " + deliveryId);
+                deliveryService.updateDelivery(deliveryId,deliveryDTO);
+            }
 
             // 결제시 보유포인트에 적립포인트를 합산
             Member member = order.getMember();
@@ -119,7 +125,8 @@ public class OrderServiceImpl implements OrderService{
             memberRepository.save(member);
 
             // DB에 저장
-            return orderCoffeeBeanRepository.save(orderCoffeeBean);
+            orderCoffeeBeanRepository.saveAll(orderCoffeeBeans);
+            return orderCoffeeBeans;
         } catch (Exception e) {
             e.printStackTrace(); // 또는 log.error("저장 실패", e);
             throw e;
