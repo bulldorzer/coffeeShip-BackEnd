@@ -161,7 +161,7 @@ public class CartServiceImpl implements CartService{
 
         // DTO에서 받은 값으로 업데이트
         cartItem.changeQty(cartCoffeeBeanDTO.getQty());
-        cartItem.changeGrindFlag(cartCoffeeBeanDTO.isGrind_flag());
+        cartItem.changeGrindFlag(cartCoffeeBeanDTO.isGrindFlag());
 
         // 업데이트된 정보 저장
         cartCoffeeBeanRepository.save(cartItem);

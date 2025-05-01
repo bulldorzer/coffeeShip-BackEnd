@@ -20,13 +20,13 @@ public class CartCoffeeBeanListDTO {
     private String name;            // 원두 이름
     private int price;              // 원두 가격
     private int qty;                // 장바구니 원두 수량
-    private boolean grind_flag;     // 분좨여부
+    private boolean grindFlag;     // 분좨여부
     private String memberShip;
 
     private String imageFile;       // 이미지 파일?
 
     // 생성자
-    public CartCoffeeBeanListDTO(Long cartCoffeeBeanId, Long cartId, Long memberId, Long coffeeBeanId, String name, int price, int qty, boolean grind_flag, String memberShip, String imageFile) {
+    public CartCoffeeBeanListDTO(Long cartCoffeeBeanId, Long cartId, Long memberId, Long coffeeBeanId, String name, int price, int qty, boolean grindFlag, String memberShip, String imageFile) {
         this.cartCoffeeBeanId = cartCoffeeBeanId;
         this.cartId = cartId;
         this.memberId = memberId;
@@ -34,7 +34,7 @@ public class CartCoffeeBeanListDTO {
         this.name = name;
         this.price = price;
         this.qty = qty;
-        this.grind_flag = grind_flag;
+        this.grindFlag = grindFlag;
         this.memberShip = memberShip;
 
         this.imageFile = imageFile;
