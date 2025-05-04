@@ -121,8 +121,8 @@ public class CartServiceImpl implements CartService{
                     ((Number) row[5]).intValue(),  // price
                     ((Number) row[6]).intValue(),  // qty
                     (Boolean) row[7],              // grindFlag
-                    imageFile,                     // imageFile
-                    memberShip                     // <-- 추가된 필드
+                    memberShip,                    // <-- 추가된 필드
+                    imageFile                      // imageFile
             );
 
             dtoList.add(dto);
